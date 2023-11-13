@@ -6,7 +6,9 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CrateCarDto } from './dto/create-car.dto';
@@ -41,25 +43,31 @@ export class CarController {
     );
   }
 
-  @Get('/:id')
+  @Get('/findOne/:id')
   @Header('Content-Type', 'application/json')
   @ApiParam({
     name: 'id',
     type: Number,
     description: 'car id',
   })
-  findOne(@Param('id') id: number | string): any {
+  findOne(@Param('id', ParseIntPipe) id: number | string): any {
     return {
       id: id,
-      name: '一个车',
+      name: '一个车车',
     };
+  }
+
+  @Get('getById')
+  async getById(@Query('id', ParseIntPipe) id: number) {
+    return this.carService.findOne(id);
   }
 
   @Post('create')
   @Header('Content-Type', 'application/json')
   create(
-    @Body() { name, color, years, isOverload = false }: CrateCarDto,
+    @Body()
+    { id, name, color, years, isOverload = false }: CrateCarDto,
   ): void {
-    return this.carService.create({ name, color, years, isOverload });
+    return this.carService.create({ id, name, color, years, isOverload });
   }
 }

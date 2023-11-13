@@ -5,6 +5,7 @@ import { Car } from './interfaces/car.interface';
 export class CarService {
   private readonly cars: Car[] = [
     {
+      id: 1,
       name: '大黄蜂',
       years: 100,
       color: 'yellow',
@@ -19,5 +20,9 @@ export class CarService {
 
   findAll(): Car[] {
     return this.cars;
+  }
+
+  findOne(id: number): Car {
+    return this.cars.find((car) => car.id === id);
   }
 }

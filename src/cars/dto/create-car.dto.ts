@@ -1,6 +1,9 @@
-import { IsBoolean, IsInt, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsString, IsUUID } from 'class-validator';
 
 export class CrateCarDto {
+  @IsUUID()
+  readonly id: number;
+
   @IsString()
   readonly name: string;
 
