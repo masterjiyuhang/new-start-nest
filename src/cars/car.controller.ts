@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   Header,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   UseGuards,
@@ -13,6 +15,7 @@ import { Car } from './interfaces/car.interface';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
@@ -24,6 +27,18 @@ export class CarController {
   @Roles(['admin'])
   async findAll(): Promise<Car[]> {
     return this.carService.findAll();
+  }
+
+  @Public()
+  @Get('err')
+  async getError(): Promise<any> {
+    throw new HttpException(
+      {
+        message: 'this is an error',
+        status: HttpStatus.FORBIDDEN,
+      },
+      HttpStatus.FORBIDDEN,
+    );
   }
 
   @Get('/:id')
