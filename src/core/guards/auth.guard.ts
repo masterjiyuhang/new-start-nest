@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import { jwtConstants } from '../config';
+import { jwtConstants } from '../config/index';
 import { Request } from 'express';
 
 @Injectable()

@@ -7,6 +7,10 @@ async function bootstrap() {
     cors: true,
   });
 
+  app.enableCors({
+    origin: '127.0.0.1',
+  });
+
   // 设置全局前缀
   app.setGlobalPrefix('/v1/api');
 
