@@ -11,8 +11,8 @@ import { CrateCarDto } from './dto/create-car.dto';
 import { CarService } from './car.service';
 import { Car } from './interfaces/car.interface';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
-import { RolesGuard } from '../core/guards/roles.guard';
-import { Roles } from '../core/decorators/roles.decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
