@@ -1,4 +1,3 @@
-import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import {
   Body,
   Controller,
@@ -14,10 +13,11 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CrateCarDto } from './dto/create-car.dto';
 import { CarService } from './car.service';
 import { Car } from './interfaces/car.interface';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { Public } from '../../common/decorators/public.decorator';
