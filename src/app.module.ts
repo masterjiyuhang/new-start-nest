@@ -5,18 +5,18 @@ import {
   RequestMethod,
   ValidationPipe,
 } from '@nestjs/common';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CoreModule } from './core/core.module';
-import { CarModule } from './cars/car.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
+import { CoreModule } from './core/core.module';
+import { CarModule } from './modules/cars/car.module';
+
 @Module({
-  imports: [CoreModule, CarModule, AuthModule, UsersModule],
+  imports: [CoreModule, CarModule],
   controllers: [AppController],
   providers: [
     AppService,

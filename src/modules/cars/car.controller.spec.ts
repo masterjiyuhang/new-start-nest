@@ -20,6 +20,7 @@ describe('CarController', () => {
     it('should return an array of cars', async () => {
       const result: Car[] = [
         {
+          id: 1,
           name: '小车',
           years: 2,
           color: 'red',

@@ -6,7 +6,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { CarService } from '../../cars/car.service';
+import { CarService } from '../../modules/cars/car.service';
 
 @Injectable()
 export class CarByIdPipe implements PipeTransform<string> {
