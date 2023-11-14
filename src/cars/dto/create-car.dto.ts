@@ -1,8 +1,15 @@
-import { IsBoolean, IsInt, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CrateCarDto {
-  @IsUUID()
-  readonly id: number;
+  @IsNumber()
+  @IsOptional()
+  readonly id?: number;
 
   @IsString()
   readonly name: string;
@@ -14,5 +21,6 @@ export class CrateCarDto {
   readonly color: string;
 
   @IsBoolean()
-  readonly isOverload: boolean;
+  @IsOptional()
+  readonly isOverload: boolean = false;
 }

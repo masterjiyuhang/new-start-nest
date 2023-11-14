@@ -1,3 +1,4 @@
+import { ValidationPipe } from './../common/pipes/validation.pipe';
 import {
   Body,
   Controller,
@@ -17,7 +18,8 @@ import { Car } from './interfaces/car.interface';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Public } from '../common/decorators/public.decorator';
+import { CarByIdPipe } from '../common/pipes/CarById.pipe';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
@@ -58,16 +60,17 @@ export class CarController {
   }
 
   @Get('getById')
-  async getById(@Query('id', ParseIntPipe) id: number) {
-    return this.carService.findOne(id);
+  async getById(@Query('id', CarByIdPipe) car: Car) {
+    return car;
   }
 
   @Post('create')
   @Header('Content-Type', 'application/json')
   create(
-    @Body()
-    { id, name, color, years, isOverload = false }: CrateCarDto,
+    @Body(new ValidationPipe())
+    { name, color, years, isOverload = false }: CrateCarDto,
   ): void {
+    const id = this.carService.findAll().slice(-1)[0].id + 1;
     return this.carService.create({ id, name, color, years, isOverload });
   }
 }
