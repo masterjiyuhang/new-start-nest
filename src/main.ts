@@ -21,7 +21,7 @@ async function bootstrap() {
     .setTitle('API Example')
     .setDescription('The v1 API description')
     .setVersion('1.0')
-    .setBasePath('/v1/api')
+    .addServer('/v1/api')
     .addBasicAuth()
     .build();
 
