@@ -2,11 +2,13 @@ import { ValidationPipe } from './../common/pipes/validation.pipe';
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Get,
   Header,
   HttpException,
   HttpStatus,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Post,
   Query,
@@ -28,8 +30,13 @@ export class CarController {
   constructor(private readonly carService: CarService) {}
 
   @Get('list')
-  @Roles(['admin'])
-  async findAll(): Promise<Car[]> {
+  @Roles('admin')
+  async findAll(
+    @Query('isOverload', new DefaultValuePipe(true), ParseBoolPipe)
+    isOverLoadOnly: boolean,
+    @Query('page', new DefaultValuePipe(0), ParseIntPipe) page: number,
+  ): Promise<Car[]> {
+    console.log(isOverLoadOnly, page, 'list params');
     return this.carService.findAll();
   }
 
@@ -52,6 +59,7 @@ export class CarController {
     type: Number,
     description: 'car id',
   })
+  @Roles('user')
   findOne(@Param('id', ParseIntPipe) id: number | string): any {
     return {
       id: id,
