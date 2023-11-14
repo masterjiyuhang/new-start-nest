@@ -6,6 +6,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,9 +15,17 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 import { CoreModule } from './core/core.module';
 import { CarModule } from './modules/cars/car.module';
+import { defaultConfig, baseConfig } from './common/config';
 
 @Module({
-  imports: [CoreModule, CarModule],
+  imports: [
+    CoreModule,
+    CarModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [baseConfig, defaultConfig],
+    }),
+  ],
   controllers: [AppController],
   providers: [
     AppService,
