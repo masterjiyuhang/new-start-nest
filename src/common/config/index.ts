@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import { db } from './db';
 
 export const jwtConstants = {
   secret:
@@ -10,10 +11,10 @@ export const baseConfig = registerAs('baseConfig', () => ({
     type: 'mysql',
     synchronize: true, //是否自动同步实体文件,生产环境建议关闭
     logging: true,
-    host: 'xxxx',
+    host: 'www.cchang.fun',
     port: 3306,
-    username: 'xxxx',
-    password: 'xxxx',
+    username: 'nest',
+    password: 'YT7LDZke3RCCmth5',
     database: 'management',
     extra: {
       connectionLimit: 10,
@@ -26,6 +27,7 @@ export const baseConfig = registerAs('baseConfig', () => ({
       default: () => 'CURRENT_TIMESTAMP',
       onUpdate: 'CURRENT_TIMESTAMP',
     },
+    ...db,
   },
 }));
 

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Length, IsEmail } from 'class-validator';
+import { IsNotBlacklistedDomainConstraint } from 'src/common/customerValidate';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -15,14 +16,8 @@ export class CreateUserDto {
   readonly username: string;
 
   @IsNotEmpty()
-  @IsEmail(
-    {
-      host_blacklist: ['qq.com'],
-    },
-    {
-      message: '邮箱不符合规则',
-    },
-  )
+  @IsEmail()
+  @IsNotBlacklistedDomainConstraint()
   readonly email: string;
 
   @IsNotEmpty()
