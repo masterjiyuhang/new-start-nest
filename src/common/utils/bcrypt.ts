@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt';
+import { hashSync, compare, genSaltSync } from 'bcrypt';
 
 const saltRounds = 10;
-const salt = bcrypt.genSaltSync(saltRounds);
+const salt = genSaltSync(saltRounds);
 
 /**
  * 加密
@@ -9,13 +9,13 @@ const salt = bcrypt.genSaltSync(saltRounds);
  * @returns
  */
 export const hashPassword = (myPlaintextPassword: string) =>
-  bcrypt.hashSync(myPlaintextPassword, salt);
+  hashSync(myPlaintextPassword, salt);
 
 /**
  * 比较密码
  * @param password
  * @param userInputPass
  */
-export const compare = (password: string, userInputPass: string) => {
-  bcrypt.compare(password, userInputPass);
+export const comparePassword = (password: string, hashedPassword: string) => {
+  return compare(password, hashedPassword);
 };

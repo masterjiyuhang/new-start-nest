@@ -1,3 +1,4 @@
+import { UsersService } from './../../core/users/users.service';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -13,6 +14,7 @@ import { Request } from 'express';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
+    private usersService: UsersService,
     private jwtService: JwtService,
     private reflector: Reflector,
   ) {}
@@ -38,9 +40,11 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
+      const { userId } = payload;
+      const currentUser = await this.usersService.findByUserId(userId);
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = payload;
+      request['user'] = currentUser;
     } catch {
       throw new UnauthorizedException();
     }
