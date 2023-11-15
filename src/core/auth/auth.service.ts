@@ -7,27 +7,17 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-import { User, UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import { Token } from './dto/token.dto';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private usersService: UserService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
-
-  async signIn(username: string, password: string) {
-    const user = await this.usersService.findByUsername(username);
-    if (user?.password !== password) {
-      throw new UnauthorizedException();
-    }
-
-    return this.generateTokens({
-      userId: user.userId,
-    });
-  }
 
   async login(username: string, password: string): Promise<Token> {
     const user = await this.usersService.findByUsername(username);
@@ -46,7 +36,7 @@ export class AuthService {
     }
 
     return this.generateTokens({
-      userId: user.userId,
+      userId: user.id,
     });
   }
 
@@ -59,18 +49,18 @@ export class AuthService {
     return this.usersService.findByUserId(id);
   }
 
-  generateTokens(payload: { userId: string }): Token {
+  generateTokens(payload: { userId: number }): Token {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),
     };
   }
 
-  private generateAccessToken(payload: { userId: string }): string {
+  private generateAccessToken(payload: { userId: number }): string {
     return this.jwtService.sign(payload);
   }
 
-  private generateRefreshToken(payload: { userId: string }): string {
+  private generateRefreshToken(payload: { userId: number }): string {
     const jwtRefreshSecret = this.configService.get('jwtRefreshSecret');
     const RefreshToken = this.jwtService.sign(payload, {
       secret: jwtRefreshSecret,

@@ -53,7 +53,7 @@ dependencies:
   graphql:
     specifier: ^16.8.1
     version: 16.8.1
-  lodash-es:
+  lodash:
     specifier: ^4.17.21
     version: 4.17.21
   mysql2:
@@ -94,9 +94,9 @@ devDependencies:
   '@types/jest':
     specifier: ^29.5.2
     version: 29.5.8
-  '@types/lodash-es':
-    specifier: ^4.17.11
-    version: 4.17.11
+  '@types/lodash':
+    specifier: ^4.14.201
+    version: 4.14.201
   '@types/node':
     specifier: ^20.3.1
     version: 20.9.0
@@ -1781,12 +1781,6 @@ packages:
     dependencies:
       '@types/node': 20.9.0
     dev: false
-
-  /@types/lodash-es@4.17.11:
-    resolution: {integrity: sha512-eCw8FYAWHt2DDl77s+AMLLzPn310LKohruumpucZI4oOFJkIgnlaJcy23OKMJxx4r9PeTF13Gv6w+jqjWQaYUg==}
-    dependencies:
-      '@types/lodash': 4.14.201
-    dev: true
 
   /@types/lodash@4.14.201:
     resolution: {integrity: sha512-y9euML0cim1JrykNxADLfaG0FgD1g/yTHwUs/Jg9ZIU7WKj2/4IW9Lbb1WZbvck78W/lfGXFfe+u2EGfIJXdLQ==}
@@ -4675,10 +4669,6 @@ packages:
     dependencies:
       p-locate: 5.0.0
     dev: true
-
-  /lodash-es@4.17.21:
-    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-    dev: false
 
   /lodash.includes@4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}

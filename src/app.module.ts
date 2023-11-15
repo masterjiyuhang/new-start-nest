@@ -6,7 +6,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +25,16 @@ import { defaultConfig, baseConfig } from './common/config';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [baseConfig, defaultConfig],
+    }),
+    TypeOrmModule.forRootAsync({
+      useFactory: (config: ConfigService) => {
+        const dbConfig = {
+          ...config.get<TypeOrmModuleOptions>('baseConfig')['db'],
+        };
+        console.log('Database connection configuration:', dbConfig);
+        return dbConfig;
+      },
+      inject: [ConfigService],
     }),
   ],
   controllers: [AppController],

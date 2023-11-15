@@ -1,4 +1,4 @@
-import { UsersService } from './../../core/users/users.service';
+import { UserService } from '../../core/user/user.service';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -14,7 +14,7 @@ import { Request } from 'express';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private usersService: UsersService,
+    private usersService: UserService,
     private jwtService: JwtService,
     private reflector: Reflector,
   ) {}
