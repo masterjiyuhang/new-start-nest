@@ -5,12 +5,16 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { Public } from '../../common/decorators/public.decorator';
+// import { AuthGuard } from 'src/common/guards/auth.guard';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -27,5 +31,14 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Get('check')
+  // @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
+  public check(@Req() req: any): any {
+    return {
+      res: req.user,
+    };
   }
 }

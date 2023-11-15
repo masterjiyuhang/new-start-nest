@@ -2,6 +2,8 @@ import { Reflector } from '@nestjs/core';
 import {
   CanActivate,
   ExecutionContext,
+  HttpException,
+  HttpStatus,
   // HttpException,
   // HttpStatus,
   Injectable,
@@ -43,6 +45,11 @@ export class RolesGuard implements CanActivate {
     // return true;
 
     // 当守卫返回 false 时，框架会抛出一个 ForbiddenException 异常
-    return user.roles.some((role: string) => roles.includes(role));
+    const currentUserRoles = user.roles ?? [];
+    const canGo = currentUserRoles.some((role: string) => roles.includes(role));
+    if (!canGo) {
+      throw new HttpException('当前用户权限不足', HttpStatus.FORBIDDEN);
+    }
+    return true;
   }
 }

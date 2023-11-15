@@ -13,6 +13,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { PassportModule } from '@nestjs/passport';
 
 import { CoreModule } from './core/core.module';
 import { CarModule } from './modules/cars/car.module';
@@ -36,6 +37,7 @@ import { defaultConfig, baseConfig } from './common/config';
       },
       inject: [ConfigService],
     }),
+    PassportModule,
   ],
   controllers: [AppController],
   providers: [

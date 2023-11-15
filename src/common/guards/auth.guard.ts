@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { jwtConstants } from '../config/index';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -30,11 +30,13 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
+
+    console.log('global auth guard is executed,');
 
     try {
       const payload = await this.jwtService.verifyAsync(token, {

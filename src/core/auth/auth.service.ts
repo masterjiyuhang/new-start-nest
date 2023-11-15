@@ -57,7 +57,11 @@ export class AuthService {
   }
 
   private generateAccessToken(payload: { userId: number }): string {
-    return this.jwtService.sign(payload);
+    const jwtSecret = this.configService.get('jwtSecret');
+    return this.jwtService.sign(payload, {
+      secret: jwtSecret,
+      expiresIn: '1d', // Set greater than the expiresIn of the access_token
+    });
   }
 
   private generateRefreshToken(payload: { userId: number }): string {
