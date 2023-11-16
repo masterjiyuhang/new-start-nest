@@ -6,7 +6,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
-// import { jwtConstants } from '../../common/config';
 import { AuthGuard } from '../../common/guards/auth.guard';
 import { JwtStrategy } from './jwt.strategy';
 

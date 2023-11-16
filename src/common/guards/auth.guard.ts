@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import { jwtConstants } from '../config/index';
+import { defaultConfig } from '../config/index';
 import type { Request } from 'express';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret,
+        secret: defaultConfig().jwtSecret,
       });
       const { userId } = payload;
       const currentUser = await this.usersService.findByUserId(userId);
