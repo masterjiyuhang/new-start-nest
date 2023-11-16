@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BaseTime } from '../../../common/entity/BaseEntity';
+import { Role } from 'src/core/role/entities/role.entity';
 
 @Entity('user')
 export class User extends BaseTime {
@@ -14,4 +21,10 @@ export class User extends BaseTime {
 
   @Column()
   password: string; //密码
+
+  @ManyToMany(() => Role)
+  @JoinTable({
+    name: 'user_role_relation',
+  })
+  roles: Role[];
 }

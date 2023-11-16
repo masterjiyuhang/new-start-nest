@@ -30,5 +30,5 @@ export class CreateUserDto {
     example: [1, 2, 3],
     description: '角色id',
   })
-  roleIds: number[] = [3];
+  roleIds: number[]; // 默认为普通用户
 }

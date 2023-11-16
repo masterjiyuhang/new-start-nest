@@ -1,14 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
+import { isEmpty } from 'lodash';
 
 import { comparePassword, hashPassword } from '../../common/utils/bcrypt';
 import { User } from './entities/user.entity';
 import { ApiException } from 'src/common/filters/exception-list';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
 import { CreateUserDto } from './dto/create-user.dto';
-import { isEmpty } from 'lodash';
+import { Role } from '../role/entities/role.entity';
+import { roleEnums } from 'src/common/enums/role.enums';
 
 // This should be a real class/interface representing a user entity
 
@@ -19,6 +21,8 @@ export class UserService {
     private dataSource: DataSource,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
   ) {}
 
   async createMany(users: User[]) {
@@ -30,21 +34,33 @@ export class UserService {
 
   async createUser(payload: CreateUserDto): Promise<string> {
     const { username, password, email, roleIds } = payload;
-    console.log(roleIds, 'roles id..');
+    // 默认给注册的用户赋值普通用户角色
+    const rolesIdList = roleIds || [roleEnums.USER];
     const enHashPassword = hashPassword(password);
     const existUser = await this.userRepository.findOne({
       where: { username },
     });
+
     if (!isEmpty(existUser)) {
       throw new ApiException('用户名已存在', ApiErrorCode.USER_EXIST);
     }
-    const newUser = this.userRepository.create({
-      username,
-      password: enHashPassword,
-      email,
-    });
-    await this.userRepository.save(newUser);
-    return '注册成功';
+    try {
+      const roles = await this.roleRepository.find({
+        where: {
+          id: In(rolesIdList),
+        },
+      });
+      const newUser = this.userRepository.create({
+        username,
+        password: enHashPassword,
+        email,
+        roles,
+      });
+      await this.userRepository.save(newUser);
+      return '注册成功';
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findByUsername(username: string): Promise<User | undefined> {
@@ -60,10 +76,39 @@ export class UserService {
   async findByUserId(userId: number): Promise<User | undefined> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
+      relations: ['roles', 'roles.permissions'],
     });
+
     if (!user)
       throw new ApiException('用户不存在', ApiErrorCode.USER_NOT_EXIST);
+
     return user;
+  }
+
+  async findRoleOrPermissionByUserId(
+    userId: number,
+  ): Promise<{ roles: string[]; permissions: string[] }> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles.permissions'],
+    });
+
+    if (!user)
+      throw new ApiException('用户不存在', ApiErrorCode.USER_NOT_EXIST);
+
+    const returnRoles: string[] = user.roles.map((item) => {
+      return item.id;
+    });
+
+    const permissions = user.roles.flatMap((role) => role.permissions);
+    const returnPermissions = permissions.map((item) => {
+      return item.id;
+    });
+
+    return {
+      roles: returnRoles,
+      permissions: returnPermissions,
+    };
   }
 
   validatePassword(password: string, hashedPassword: string): Promise<boolean> {

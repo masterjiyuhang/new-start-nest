@@ -8,5 +8,5 @@
 
 import { SetMetadata, CustomDecorator } from '@nestjs/common';
 
-export const Roles = (...roles: string[]): CustomDecorator =>
+export const Roles = (...roles: number[]): CustomDecorator =>
   SetMetadata('roles', roles);

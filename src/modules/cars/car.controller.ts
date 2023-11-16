@@ -22,6 +22,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { CarByIdPipe } from '../../common/pipes/CarById.pipe';
+import { roleEnums } from 'src/common/enums/role.enums';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
@@ -30,7 +31,7 @@ export class CarController {
   constructor(private readonly carService: CarService) {}
 
   @Get('list')
-  @Roles('admin')
+  @Roles(roleEnums.ADMIN, roleEnums.SUPER_ADMIN)
   async findAll(
     @Query('isOverload', new DefaultValuePipe(true), ParseBoolPipe)
     isOverLoadOnly?: boolean,
@@ -59,7 +60,7 @@ export class CarController {
     type: Number,
     description: 'car id',
   })
-  @Roles('user')
+  @Roles(roleEnums.ADMIN, roleEnums.SUPER_ADMIN, roleEnums.USER)
   findOne(@Param('id', ParseIntPipe) id: number | string): any {
     return {
       id: id,

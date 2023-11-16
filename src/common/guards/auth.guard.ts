@@ -44,6 +44,11 @@ export class AuthGuard implements CanActivate {
       });
       const { userId } = payload;
       const currentUser = await this.usersService.findByUserId(userId);
+      const { roles, permissions } =
+        await this.usersService.findRoleOrPermissionByUserId(userId);
+
+      request['userRoles'] = roles;
+      request['userPermissions'] = permissions;
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request['user'] = currentUser;
