@@ -15,6 +15,7 @@ import { AuthService } from './auth.service';
 import { Public } from '../../common/decorators/public.decorator';
 // import { AuthGuard } from 'src/common/guards/auth.guard';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { User } from '../user/entities/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -36,9 +37,7 @@ export class AuthController {
   @Get('check')
   // @UseGuards(AuthGuard)
   @UseGuards(JwtAuthGuard)
-  public check(@Req() req: any): any {
-    return {
-      res: req.user,
-    };
+  public check(@Req() req: any): User {
+    return req.user.toResponseObject();
   }
 }

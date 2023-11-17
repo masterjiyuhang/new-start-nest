@@ -1,9 +1,11 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as passport from 'passport';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -11,6 +13,26 @@ async function bootstrap() {
   });
 
   app.use(passport.initialize());
+
+  //2. 配置class-transformer
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  //3. 配置class-validator
+  useContainer(app.select(AppModule), {
+    fallbackOnErrors: true,
+  });
+
+  //1. 配置全局的验证管道
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidUnknownValues: true,
+      transformOptions: {
+        excludeExtraneousValues: true,
+      },
+    }),
+  );
 
   app.enableCors({
     origin: '127.0.0.1',
