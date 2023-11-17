@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as passport from 'passport';
+import * as csurf from 'csurf';
+
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -10,6 +12,7 @@ async function bootstrap() {
   });
 
   app.use(passport.initialize());
+  app.use(csurf());
 
   app.enableCors({
     origin: '127.0.0.1',
