@@ -1,15 +1,18 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as passport from 'passport';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { useContainer } from 'class-validator';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
+    // logger: ['error', 'warn'],
   });
 
   app.use(passport.initialize());
@@ -54,6 +57,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('/', app, document);
+
+  const rrr = join(__dirname, 'images');
+  app.useStaticAssets(rrr, {
+    prefix: '/images',
+  });
 
   await app.listen(process.env.PORT || 3001);
   console.log(`Application is running on: ${await app.getUrl()}`);

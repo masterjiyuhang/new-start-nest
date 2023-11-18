@@ -19,11 +19,13 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { CoreModule } from './core/core.module';
 import { CarModule } from './modules/cars/car.module';
 import { defaultConfig, baseConfig } from './common/config';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
     CoreModule,
     CarModule,
+    UploadModule,
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
@@ -39,7 +41,7 @@ import { defaultConfig, baseConfig } from './common/config';
         const dbConfig = {
           ...config.get<TypeOrmModuleOptions>('baseConfig')['db'],
         };
-        console.log('Database connection configuration:', dbConfig);
+        // console.log('Database connection configuration:', dbConfig);
         return dbConfig;
       },
       inject: [ConfigService],

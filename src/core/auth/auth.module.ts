@@ -15,7 +15,7 @@ import { JwtStrategy } from './jwt.strategy';
     JwtModule.registerAsync({
       global: true,
       useFactory: (config: ConfigService) => {
-        console.log(config.get('jwtSecret'));
+        // console.log(config.get('jwtSecret'));
         return {
           secret: config.get('jwtSecret'),
           signOptions: { expiresIn: '1d' },
