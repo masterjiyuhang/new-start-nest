@@ -15,23 +15,23 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PassportModule } from '@nestjs/passport';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { CoreModule } from './core/core.module';
 import { CarModule } from './modules/cars/car.module';
 import { defaultConfig, baseConfig } from './common/config';
 import { UploadModule } from './modules/upload/upload.module';
+import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
-    CoreModule,
-    CarModule,
-    UploadModule,
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
         limit: 10,
       },
     ]),
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [baseConfig, defaultConfig],
@@ -47,6 +47,11 @@ import { UploadModule } from './modules/upload/upload.module';
       inject: [ConfigService],
     }),
     PassportModule,
+
+    CoreModule,
+    CarModule,
+    UploadModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [
