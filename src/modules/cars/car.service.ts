@@ -1,10 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Car } from './interfaces/car.interface';
 import { SchedulerRegistry } from '@nestjs/schedule';
-
+import { HttpService } from '@nestjs/axios';
+import { catchError, firstValueFrom } from 'rxjs';
+import type { AxiosError } from 'axios';
 @Injectable()
 export class CarService {
-  constructor(private schedulerRegistry: SchedulerRegistry) {}
+  private readonly logger = new Logger(CarService.name);
+  constructor(
+    private schedulerRegistry: SchedulerRegistry,
+    private readonly httpService: HttpService,
+  ) {}
 
   private readonly cars: Car[] = [
     {
@@ -23,7 +29,7 @@ export class CarService {
   }
 
   findAll(): Car[] {
-    const job = this.schedulerRegistry.getCronJob('');
+    const job = this.schedulerRegistry.getCronJob('sixCron');
 
     job.stop();
     // 停止定时任务
@@ -33,5 +39,23 @@ export class CarService {
 
   findOne(id: number): Car {
     return this.cars.find((car) => car.id === id);
+  }
+
+  async testAxios(token: string): Promise<Car[]> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<Car[]>('http://localhost:3000/v1/api/car/list', {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error.response.data);
+            throw 'An error happened!';
+          }),
+        ),
+    );
+    return data;
   }
 }

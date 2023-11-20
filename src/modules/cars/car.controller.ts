@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
@@ -23,6 +24,7 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { CarByIdPipe } from '../../common/pipes/CarById.pipe';
 import { roleEnums } from 'src/common/enums/role.enums';
+import { Request } from 'express';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
@@ -71,6 +73,12 @@ export class CarController {
   @Get('getById')
   async getById(@Query('id', CarByIdPipe) car: Car) {
     return car;
+  }
+
+  @Get('testAxios')
+  async test(@Req() req: Request) {
+    console.log(req);
+    return this.carService.testAxios(req.headers.authorization);
   }
 
   @Post('create')
