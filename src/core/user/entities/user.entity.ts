@@ -18,7 +18,7 @@ export class User extends BaseTime {
   @Column({ length: 30 })
   username: string; //用户名
 
-  @Column({ length: 15 })
+  @Column({ length: 25 })
   email: string; //邮箱
 
   @Exclude()
