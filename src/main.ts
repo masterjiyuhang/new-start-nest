@@ -16,15 +16,6 @@ async function bootstrap() {
   });
 
   app.use(passport.initialize());
-
-  //2. 配置class-transformer
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-
-  //3. 配置class-validator
-  useContainer(app.select(AppModule), {
-    fallbackOnErrors: true,
-  });
-
   //1. 配置全局的验证管道
   app.useGlobalPipes(
     new ValidationPipe({
@@ -32,10 +23,17 @@ async function bootstrap() {
       transform: true,
       forbidUnknownValues: true,
       transformOptions: {
-        excludeExtraneousValues: true,
+        excludeExtraneousValues: false,
       },
     }),
   );
+  //2. 配置class-transformer
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  //3. 配置class-validator
+  useContainer(app.select(AppModule), {
+    fallbackOnErrors: true,
+  });
 
   app.enableCors({
     origin: '127.0.0.1',
