@@ -9,7 +9,7 @@ import {
 export class CrateCarDto {
   @IsNumber()
   @IsOptional()
-  readonly id?: number;
+  readonly id: number;
 
   @IsString()
   readonly name: string;

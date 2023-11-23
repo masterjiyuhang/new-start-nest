@@ -18,22 +18,23 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CrateCarDto } from './dto/create-car.dto';
 import { CarService } from './car.service';
 import { Car } from './interfaces/car.interface';
-import { ValidationPipe } from '../../common/pipes/validation.pipe';
+import { CustomerValidationPipe } from '../../common/pipes/validation.pipe';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { roleEnums } from 'src/common/enums/role.enums';
 import { Public } from '../../common/decorators/public.decorator';
 import { CarByIdPipe } from '../../common/pipes/CarById.pipe';
-import { roleEnums } from 'src/common/enums/role.enums';
 import { Request } from 'express';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
 @Controller('car')
+@Public()
 export class CarController {
   constructor(private readonly carService: CarService) {}
 
   @Get('list')
-  @Roles(roleEnums.ADMIN, roleEnums.SUPER_ADMIN)
+  // @Roles(roleEnums.ADMIN, roleEnums.SUPER_ADMIN)
   async findAll(
     @Query('isOverload', new DefaultValuePipe(true), ParseBoolPipe)
     isOverLoadOnly?: boolean,
@@ -43,7 +44,6 @@ export class CarController {
     return this.carService.findAll();
   }
 
-  @Public()
   @Get('err')
   async getError(): Promise<any> {
     throw new HttpException(
@@ -84,7 +84,7 @@ export class CarController {
   @Post('create')
   @Header('Content-Type', 'application/json')
   create(
-    @Body(new ValidationPipe())
+    @Body(new CustomerValidationPipe())
     { name, color, years, isOverload = false }: CrateCarDto,
   ): void {
     const id = this.carService.findAll().slice(-1)[0].id + 1;
