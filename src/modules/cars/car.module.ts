@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { CarController } from './car.controller';
 import { CarService } from './car.service';
-import { HttpModule } from '@nestjs/axios';
+import { Car } from './entities/car.entity';
+import { CarType } from '../car-type/entities/car-type.entity';
 
 @Module({
   imports: [
@@ -9,6 +13,7 @@ import { HttpModule } from '@nestjs/axios';
       timeout: 20000,
       maxRedirects: 3,
     }),
+    TypeOrmModule.forFeature([Car, CarType]),
   ],
   controllers: [CarController],
   providers: [CarService],

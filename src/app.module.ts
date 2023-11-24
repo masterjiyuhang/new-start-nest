@@ -22,6 +22,7 @@ import { CarModule } from './modules/cars/car.module';
 import { defaultConfig, baseConfig } from './common/config';
 import { UploadModule } from './modules/upload/upload.module';
 import { TasksModule } from './modules/tasks/tasks.module';
+import { CarTypeModule } from './modules/car-type/car-type.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 
     CoreModule,
     CarModule,
+    CarTypeModule,
     UploadModule,
     TasksModule,
   ],

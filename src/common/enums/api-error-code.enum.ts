@@ -10,4 +10,7 @@ export enum ApiErrorCode {
   LOGIN_EXPIRE = 401, //登录状态已过期
   Forbidden = 403, //权限不足
   DATABASE_ERROR = 30001, //数据库错误
+
+  CAR_TYPE_EXIST = 10006, // 车辆类型已存在
+  CAR_EXIST = 10007, // 车辆类型已存在
 }

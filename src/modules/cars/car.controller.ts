@@ -15,7 +15,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
-import { CrateCarDto } from './dto/create-car.dto';
+import { CreateCarDto } from './dto/create-car.dto';
 import { CarService } from './car.service';
 import { Car } from './interfaces/car.interface';
 import { CustomerValidationPipe } from '../../common/pipes/validation.pipe';
@@ -39,9 +39,13 @@ export class CarController {
     @Query('isOverload', new DefaultValuePipe(true), ParseBoolPipe)
     isOverLoadOnly?: boolean,
     @Query('page', new DefaultValuePipe(0), ParseIntPipe) page?: number,
-  ): Promise<Car[]> {
+  ) {
     console.log(isOverLoadOnly, page, 'list params');
-    return this.carService.findAll();
+    // const [list, total] = await this.carService.findAll();
+    // return {
+    //   list,
+    //   total,
+    // };
   }
 
   @Get('err')
@@ -85,9 +89,9 @@ export class CarController {
   @Header('Content-Type', 'application/json')
   create(
     @Body(new CustomerValidationPipe())
-    { name, color, years, isOverload = false }: CrateCarDto,
-  ): void {
-    const id = this.carService.findAll().slice(-1)[0].id + 1;
-    return this.carService.create({ id, name, color, years, isOverload });
+    payload: CreateCarDto,
+  ) {
+    console.log(payload, '创建的参数');
+    return this.carService.create(payload);
   }
 }

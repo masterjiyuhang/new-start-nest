@@ -1,26 +1,33 @@
 import {
   IsBoolean,
   IsInt,
-  IsNumber,
+  IsNotEmpty,
   IsOptional,
   IsString,
 } from 'class-validator';
 
-export class CrateCarDto {
-  @IsNumber()
-  @IsOptional()
-  readonly id: number;
+export class CreateCarDto {
+  @IsString()
+  @IsNotEmpty()
+  readonly title: string;
 
   @IsString()
-  readonly name: string;
+  @IsNotEmpty()
+  readonly city: string;
 
   @IsInt()
+  @IsNotEmpty()
   readonly years: number;
 
   @IsString()
+  @IsNotEmpty()
   readonly color: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly transmission: string;
 
   @IsBoolean()
   @IsOptional()
-  readonly isOverload: boolean = false;
+  readonly is_over_load: boolean = false;
 }

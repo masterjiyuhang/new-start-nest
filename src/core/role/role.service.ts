@@ -27,7 +27,7 @@ export class RoleService {
     if (existRole)
       throw new ApiException('角色已存在', ApiErrorCode.ROLE_EXIST);
 
-    //查询传入数组permissionIds的全部permission实体
+    // 查询传入数组permissionIds的全部permission实体
     const permissions = await this.permissionRepository.find({
       where: {
         id: In(permissionIds),
