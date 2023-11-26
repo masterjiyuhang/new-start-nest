@@ -67,19 +67,19 @@ export class CarService {
   }
 
   findAll() {
-    // const job = this.schedulerRegistry.getCronJob('sixCron');
-    // job.stop();
-    // // 停止定时任务
-    // console.log(' 停止定时任务 sixCron 的时间：', job.lastDate());
-    // return this.carRepository.findAndCount();
+    const job = this.schedulerRegistry.getCronJob('sixCron');
+    job.stop();
+    // 停止定时任务
+    console.log(' 停止定时任务 sixCron 的时间：', job.lastDate());
+    return this.carRepository.findAndCount();
   }
 
   async findOne(id: number) {
-    // return await this.carRepository.findOne({
-    //   where: {
-    //     id,
-    //   },
-    // });
+    return await this.carRepository.findOne({
+      where: {
+        id,
+      },
+    });
   }
 
   async testAxios(token: string) {
