@@ -25,6 +25,7 @@ import { roleEnums } from 'src/common/enums/role.enums';
 import { Public } from '../../common/decorators/public.decorator';
 import { CarByNamePipe } from '../../common/pipes/CarByName.pipe';
 import { Request } from 'express';
+import { UpdateCarDto } from './dto/update-car.dto';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
@@ -92,21 +93,26 @@ export class CarController {
   @Get('testAxios')
   async test(@Req() req: Request) {
     console.log(req);
-    return this.carService.testAxios(req.headers.authorization || '');
+    return await this.carService.testAxios(req.headers.authorization || '');
   }
 
   @Post('create')
   @Header('Content-Type', 'application/json')
-  create(
+  async create(
     @Body(new CustomerValidationPipe())
     payload: CreateCarDto,
   ) {
     console.log(payload, '创建的参数');
-    return this.carService.create(payload);
+    return await this.carService.create(payload);
   }
 
   @Post('del')
-  remove(@Body('name') name: string) {
-    return this.carService.remove(name);
+  async remove(@Body('name') name: string) {
+    return await this.carService.remove(name);
+  }
+
+  @Post('setType')
+  async setType(@Body() updateCarDto: UpdateCarDto) {
+    return await this.carService.setCarType(updateCarDto);
   }
 }

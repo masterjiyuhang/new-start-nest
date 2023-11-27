@@ -84,7 +84,18 @@ export class CarService {
       where: {
         title: name,
       },
+      relations: ['car_type'],
+      // 在 TypeORM 中，当你使用 relations 选项时，select 中必须包含主实体的主键字段。
+      // 因为 TypeORM 在构建 SQL 查询时，需要确保能够通过主键字段正确定位主实体的记录。
+      select: ['id', 'title', 'car_type'],
     });
+
+    // return this.carRepository
+    //   .createQueryBuilder('car')
+    //   .leftJoinAndSelect('car.car_type', 'car_type')
+    //   .select(['car.title', 'car_type.id'])
+    //   .where('car.title = :name', { name: name })
+    //   .getRawOne();
   }
 
   async findListByName(name: string): Promise<Car[]> {

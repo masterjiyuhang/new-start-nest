@@ -18,4 +18,10 @@ export class CarType extends BaseTime {
     length: 255,
   })
   car_type_desc: string;
+
+  @Column({
+    type: Number,
+    default: 0,
+  })
+  delete_flag: number;
 }
