@@ -23,7 +23,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { roleEnums } from 'src/common/enums/role.enums';
 import { Public } from '../../common/decorators/public.decorator';
-import { CarByIdPipe } from '../../common/pipes/CarById.pipe';
+import { CarByNamePipe } from '../../common/pipes/CarByName.pipe';
 import { Request } from 'express';
 
 @ApiTags('Car')
@@ -41,11 +41,11 @@ export class CarController {
     @Query('page', new DefaultValuePipe(0), ParseIntPipe) page?: number,
   ) {
     console.log(isOverLoadOnly, page, 'list params');
-    // const [list, total] = await this.carService.findAll();
-    // return {
-    //   list,
-    //   total,
-    // };
+    const [list, total] = await this.carService.findAll();
+    return {
+      list,
+      total,
+    };
   }
 
   @Get('err')
@@ -74,15 +74,25 @@ export class CarController {
     };
   }
 
-  @Get('getById')
-  async getById(@Query('id', CarByIdPipe) car: Car) {
+  @Get('getByName')
+  async getByName(@Body('name', CarByNamePipe) car: Car) {
     return car;
+  }
+
+  @Get('getListByName')
+  @ApiParam({
+    name: '汽车名称',
+    type: String,
+    description: '根据汽车名称进行模糊查询',
+  })
+  async getListByName(@Body('name') name: string) {
+    return await this.carService.findListByName(name);
   }
 
   @Get('testAxios')
   async test(@Req() req: Request) {
     console.log(req);
-    return this.carService.testAxios(req.headers.authorization);
+    return this.carService.testAxios(req.headers.authorization || '');
   }
 
   @Post('create')
@@ -93,5 +103,10 @@ export class CarController {
   ) {
     console.log(payload, '创建的参数');
     return this.carService.create(payload);
+  }
+
+  @Post('del')
+  remove(@Body('name') name: string) {
+    return this.carService.remove(name);
   }
 }

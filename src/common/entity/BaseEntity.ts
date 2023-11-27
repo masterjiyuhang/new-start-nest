@@ -12,7 +12,7 @@ export abstract class BaseTime extends BaseEntity {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  createTime: Date;
+  create_time: Date;
 
   // 在将对象转换为纯对象时应用转换函数。通过将转换函数设置为 () => undefined， updateTime 属性将在转换时被排除。
   @Transform(() => undefined, { toPlainOnly: true })
@@ -22,9 +22,9 @@ export abstract class BaseTime extends BaseEntity {
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  updateTime: Date;
+  update_time: Date;
 
   @Exclude()
-  @DeleteDateColumn({ type: 'timestamp' })
-  deleteTime: Date;
+  @DeleteDateColumn({ type: 'timestamp', nullable: false })
+  delete_time: Date;
 }

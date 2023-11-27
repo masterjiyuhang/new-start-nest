@@ -6,24 +6,24 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { isEmpty } from 'lodash';
 import { CarService } from '../../modules/cars/car.service';
 
 @Injectable()
-export class CarByIdPipe implements PipeTransform<string> {
+export class CarByNamePipe implements PipeTransform<string> {
   constructor(private readonly carService: CarService) {}
 
   async transform(value: string, metadata: ArgumentMetadata) {
     console.log(metadata, value);
-    const val = parseInt(value, 10);
-    if (isNaN(val)) {
+    if (isEmpty(value)) {
       throw new BadRequestException('Validation failed');
     }
-    const car = this.carService.findOne(val);
+    const car = await this.carService.findOne(value);
     if (car) {
       return car;
     } else {
       throw new HttpException(
-        `No car with ID ${val} found`,
+        `No car with Name ${value} found`,
         HttpStatus.NOT_FOUND,
       );
     }

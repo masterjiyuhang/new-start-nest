@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Car } from './entities/car.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { ApiException } from 'src/common/filters/exception-list';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
 import { CarType } from '../car-type/entities/car-type.entity';
@@ -40,30 +40,35 @@ export class CarService {
       is_over_load,
     });
     return this.carRepository.save(newCar);
-    // return new Promise((resolve) => {
-    //   resolve(newCar);
-    // });
-    // const newCar = this.carRepository.create(payload);
-    // return this.carRepository.save(newCar);
   }
 
+  async remove(name: string): Promise<void> {
+    const existCar = await this.carRepository.findOne({
+      where: { title: name },
+    });
+
+    if (!existCar) throw new HttpException('车辆不存在', HttpStatus.NOT_FOUND);
+
+    existCar.delete_flag = 1;
+    existCar.delete_time = new Date();
+    await this.carRepository.save(existCar);
+  }
+
+  // 设置车辆类型
   async setCarType(updateCarDto: UpdateCarDto) {
-    // const { car_type, id } = updateCarDto;
-    // const existCar = await this.carRepository.findOne({
-    //   where: { id: id },
-    // });
-    // if (!existCar) throw new HttpException('车辆不存在', HttpStatus.NOT_FOUND);
-    // const type = await this.carTypeRepository.find({
-    //   where: {
-    //     id: car_type,
-    //   },
-    // });
-    // if (!type) throw new HttpException('车辆类型不存在', HttpStatus.NOT_FOUND);
-    // const car = {
-    //   ...existCar,
-    //   car_type: type,
-    // };
-    // await this.carRepository.save(car);
+    const { car_type, title } = updateCarDto;
+    const existCar = await this.carRepository.findOne({
+      where: { title: title },
+    });
+    if (!existCar) throw new HttpException('车辆不存在', HttpStatus.NOT_FOUND);
+    const type = await this.carTypeRepository.find({
+      where: {
+        id: car_type,
+      },
+    });
+    if (!type) throw new HttpException('车辆类型不存在', HttpStatus.NOT_FOUND);
+    existCar.car_type = type;
+    await this.carRepository.save(existCar);
   }
 
   findAll() {
@@ -74,29 +79,38 @@ export class CarService {
     return this.carRepository.findAndCount();
   }
 
-  async findOne(id: number) {
+  async findOne(name: string) {
     return await this.carRepository.findOne({
       where: {
-        id,
+        title: name,
+      },
+    });
+  }
+
+  async findListByName(name: string): Promise<Car[]> {
+    return await this.carRepository.find({
+      where: {
+        // 在数据库中进行模糊查询时，通常使用 % 符号表示通配符，它匹配任意字符序列
+        title: Like(`%${name}%`),
       },
     });
   }
 
   async testAxios(token: string) {
-    // const { data } = await firstValueFrom(
-    //   this.httpService
-    //     .get<Car[]>('http://localhost:3000/v1/api/car/list', {
-    //       headers: {
-    //         Authorization: token,
-    //       },
-    //     })
-    //     .pipe(
-    //       catchError((error: AxiosError) => {
-    //         this.logger.error(error.response.data);
-    //         throw 'An error happened!';
-    //       }),
-    //     ),
-    // );
-    // return data;
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<Car[]>('http://localhost:3000/v1/api/car/list', {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error.response.data);
+            throw 'An error happened!';
+          }),
+        ),
+    );
+    return data;
   }
 }

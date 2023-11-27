@@ -40,6 +40,12 @@ export class Car extends BaseTime {
   @Column({ type: Boolean })
   is_over_load: boolean;
 
+  @Column({
+    type: Number,
+    default: 0,
+  })
+  delete_flag: number;
+
   @ManyToMany(() => CarType)
   @JoinTable({
     name: 'car_type_relation',
