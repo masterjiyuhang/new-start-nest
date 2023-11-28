@@ -49,7 +49,7 @@ async function bootstrap() {
     .setDescription('The v1 API description')
     .setVersion('1.0')
     // .addServer('/v1/api')
-    .addBasicAuth()
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
