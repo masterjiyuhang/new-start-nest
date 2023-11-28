@@ -10,21 +10,21 @@ export class TasksService {
     this.logger.debug('Called when the current second is 45');
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_12_HOURS)
   handleCron2() {
-    this.logger.debug('Called when the current second is 10');
+    this.logger.debug('Called when the current hour is 12');
   }
 
   // 要声明一个以一定间隔运行的方法，使用@Interval()装饰器前缀
-  @Interval(20000)
+  @Interval(60000 * 5)
   handleInterval() {
-    this.logger.debug('每间隔 20 s 执行');
+    this.logger.debug('每间隔 5 m 执行');
   }
 
   // 要声明一个在指定时间后运行（一次）的方法，使用@Timeout()装饰器前缀。
-  @Timeout(5000)
+  @Timeout(50000)
   handleTimeout() {
-    this.logger.debug('Called once after 5 seconds');
+    this.logger.debug('Called once after 50 seconds');
   }
 
   @Cron('*/6 * * * * *', {
