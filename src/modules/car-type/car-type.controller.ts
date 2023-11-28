@@ -12,11 +12,11 @@ export class CarTypeController {
     return this.carTypeService.create(createCarTypeDto);
   }
 
-  @Get()
+  @Get('all')
   async findAll() {
     const [carTypes, totalCount] = await this.carTypeService.findAll();
     return {
-      carTypes,
+      car_type_list: carTypes,
       total: totalCount,
     };
   }
