@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { BaseTime } from 'src/common/entity/BaseEntity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -23,5 +24,6 @@ export class CarType extends BaseTime {
     type: Number,
     default: 0,
   })
+  @Exclude()
   delete_flag: number;
 }

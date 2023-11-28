@@ -35,8 +35,7 @@ export class CarTypeService {
   }
 
   async findOne(id: string) {
-    // return `This action returns a #${id} carType`;
-    const carType = await this.carTypeRepository.find({
+    const carType = await this.carTypeRepository.findOne({
       where: {
         id,
       },
@@ -49,7 +48,7 @@ export class CarTypeService {
     return carType;
   }
 
-  async update(id: number, updateCarTypeDto: UpdateCarTypeDto) {
+  async update(id: number, updateCarTypeDto: UpdateCarTypeDto): Promise<void> {
     const { car_type_name, car_type_code, car_type_desc } = updateCarTypeDto;
     const existCarType = await this.carTypeRepository.findOne({
       where: { car_type_name },
@@ -58,15 +57,17 @@ export class CarTypeService {
     if (!existCarType)
       throw new HttpException('车辆类型不存在', HttpStatus.NOT_FOUND);
 
-    return this.carTypeRepository.update(id, {
+    await this.carTypeRepository.update(id, {
       car_type_name,
       car_type_code,
       car_type_desc,
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<void> {
     const existingCarType = await this.findOne(id);
-    return this.carTypeRepository.remove(existingCarType);
+    existingCarType.delete_flag = 1;
+    existingCarType.delete_time = new Date();
+    await this.carTypeRepository.save(existingCarType);
   }
 }

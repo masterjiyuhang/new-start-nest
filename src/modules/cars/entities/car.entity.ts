@@ -44,6 +44,7 @@ export class Car extends BaseTime {
     type: Number,
     default: 0,
   })
+  @Exclude()
   delete_flag: number;
 
   @ManyToMany(() => CarType)
