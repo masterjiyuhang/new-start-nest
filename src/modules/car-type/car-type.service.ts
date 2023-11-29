@@ -39,6 +39,7 @@ export class CarTypeService {
       where: {
         id,
       },
+      select: ['car_type_name', 'car_type_code', 'id'],
     });
 
     if (!carType) {
