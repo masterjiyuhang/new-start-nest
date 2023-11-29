@@ -54,7 +54,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('/', app, document);
+  SwaggerModule.setup('/swagger', app, document);
 
   const rrr = join(__dirname, 'images');
   app.useStaticAssets(rrr, {
