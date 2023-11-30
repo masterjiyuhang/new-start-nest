@@ -8,25 +8,6 @@ export const jwtConstants = {
 export const baseConfig = registerAs('baseConfig', () => ({
   port: process.env.PORT || 3000,
   db: {
-    type: 'mysql',
-    synchronize: true, //是否自动同步实体文件,生产环境建议关闭
-    logging: true,
-    host: 'www.cchang.fun',
-    port: 3306,
-    username: 'nest',
-    password: 'YT7LDZke3RCCmth5',
-    database: 'management',
-    extra: {
-      connectionLimit: 10,
-    },
-    createSchema: true, // 如果需要创建表
-    autoLoadEntities: true,
-    createDateColumn: { type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' },
-    updateDateColumn: {
-      type: 'timestamp',
-      default: () => 'CURRENT_TIMESTAMP',
-      onUpdate: 'CURRENT_TIMESTAMP',
-    },
     ...db,
   },
 }));
