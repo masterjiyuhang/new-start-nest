@@ -23,6 +23,7 @@ import { defaultConfig, baseConfig } from './common/config';
 import { UploadModule } from './modules/upload/upload.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
+import { MemberModule } from './modules/member/member.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { CarTypeModule } from './modules/car-type/car-type.module';
     CarTypeModule,
     UploadModule,
     TasksModule,
+    MemberModule,
   ],
   controllers: [AppController],
   providers: [
