@@ -16,6 +16,13 @@ export class Member extends BaseTime {
   @Column({ length: 255, comment: '会员描述' })
   member_desc: string;
 
+  @Column({
+    type: Number,
+    default: 0,
+  })
+  @Exclude()
+  delete_flag: number;
+
   @VersionColumn({ comment: '乐观锁' })
   version: number; // 乐观锁
 

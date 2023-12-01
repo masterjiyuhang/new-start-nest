@@ -32,7 +32,7 @@ export class MemberService {
     return this.memberRepository.find();
   }
 
-  async findOne(name: string) {
+  async findOne(name: string): Promise<Member> {
     const member = await this.memberRepository.findOne({
       where: {
         member_name: name,
@@ -47,19 +47,7 @@ export class MemberService {
     return member;
   }
 
-  async update(name: string, updateMemberDto: UpdateMemberDto) {
-    // const member = this.memberRepository.findOne({
-    //   where: {
-    //     member_name: name,
-    //   },
-    // });
-
-    // if (!member)
-    //   throw new HttpException(
-    //     `Car with name ${name} not found.`,
-    //     HttpStatus.NOT_FOUND,
-    //   );
-
+  async update(name: string, updateMemberDto: UpdateMemberDto): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     // 从连接池获得一个连接
     await queryRunner.connect();
@@ -91,7 +79,10 @@ export class MemberService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} member`;
+  async remove(name: string): Promise<void> {
+    const existingMember = await this.findOne(name);
+    existingMember.delete_flag = 1;
+    existingMember.delete_time = new Date();
+    await this.memberRepository.save(existingMember);
   }
 }
