@@ -56,13 +56,15 @@ export class MemberService {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.findOne(Member, {
+      const member = await queryRunner.manager.findOne(Member, {
         where: {
           member_name: name,
         },
       });
 
-      await queryRunner.manager.save(Member, {
+      member.version += 1;
+
+      await queryRunner.manager.save(member, {
         data: {
           updateMemberDto,
         },
