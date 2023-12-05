@@ -49,7 +49,6 @@ import { MemberModule } from './modules/member/member.module';
       inject: [ConfigService],
     }),
     PassportModule,
-
     CoreModule,
     CarModule,
     CarTypeModule,
