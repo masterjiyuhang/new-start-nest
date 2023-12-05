@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { Public } from 'src/common/decorators/public.decorator';
 
+@ApiTags('Member')
 @Controller('member')
 @Public()
 export class MemberController {
