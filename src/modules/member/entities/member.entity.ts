@@ -1,7 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { BaseTime } from 'src/common/entity/BaseEntity';
-import { Column, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
 
+@Entity('member')
 export class Member extends BaseTime {
   @Exclude()
   @PrimaryGeneratedColumn('uuid')
