@@ -40,7 +40,7 @@ export class MemberService {
     });
     if (!member) {
       throw new HttpException(
-        `Car with name ${name} not found.`,
+        `Member with name ${name} not found.`,
         HttpStatus.NOT_FOUND,
       );
     }

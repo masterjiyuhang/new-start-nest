@@ -2,10 +2,17 @@ import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('member')
+@Public()
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
+
+  @Get('test')
+  test() {
+    return 'member test';
+  }
 
   @Post()
   create(@Body() createMemberDto: CreateMemberDto) {
