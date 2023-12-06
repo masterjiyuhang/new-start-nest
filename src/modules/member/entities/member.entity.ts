@@ -24,6 +24,7 @@ export class Member extends BaseTime {
   @Exclude()
   delete_flag: number;
 
+  @Exclude()
   @VersionColumn({ comment: '乐观锁' })
   version: number; // 乐观锁
 

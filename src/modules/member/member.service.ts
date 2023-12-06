@@ -15,7 +15,7 @@ export class MemberService {
   ) {}
   async create(createMemberDto: CreateMemberDto): Promise<CreateMemberDto> {
     const { member_name: name } = createMemberDto;
-    let member = null;
+    let member: Member = null;
     member = await this.memberRepository.findOne({
       where: {
         member_name: name,
@@ -39,10 +39,7 @@ export class MemberService {
       },
     });
     if (!member) {
-      throw new HttpException(
-        `Member with name ${name} not found.`,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new Error(`Member with name ${name} not found.`);
     }
     return member;
   }
@@ -62,19 +59,26 @@ export class MemberService {
         },
       });
 
-      member.version += 1;
+      if (!member) {
+        // 处理实体不存在的情况，可能需要抛出异常或进行其他逻辑
+        throw new HttpException(
+          `Member with name ${name} not found.`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
 
-      await queryRunner.manager.save(member, {
-        data: {
-          updateMemberDto,
-        },
-      });
+      const newMember: Member = Object.assign(member, updateMemberDto);
+
+      await queryRunner.manager.save(newMember);
 
       // 提交事务  把数据写入表中
       await queryRunner.commitTransaction();
     } catch (error) {
       console.log(error, '错误信息');
       await queryRunner.rollbackTransaction();
+      if (error instanceof HttpException) {
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+      }
     } finally {
       // 返回连接给连接池
       await queryRunner.release();

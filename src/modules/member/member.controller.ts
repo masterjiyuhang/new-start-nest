@@ -16,12 +16,12 @@ export class MemberController {
     return 'member test';
   }
 
-  @Post()
+  @Post('add')
   create(@Body() createMemberDto: CreateMemberDto) {
     return this.memberService.create(createMemberDto);
   }
 
-  @Get()
+  @Get('list')
   findAll() {
     return this.memberService.findAll();
   }
@@ -31,7 +31,7 @@ export class MemberController {
     return this.memberService.findOne(name);
   }
 
-  @Patch(':name')
+  @Patch('update/:name')
   update(
     @Param('name') name: string,
     @Body() updateMemberDto: UpdateMemberDto,

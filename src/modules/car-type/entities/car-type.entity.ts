@@ -2,7 +2,12 @@ import { Exclude } from 'class-transformer';
 import { BaseTime } from 'src/common/entity/BaseEntity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({
+  name: 'car_type',
+  orderBy: {
+    create_time: 'ASC',
+  },
+})
 export class CarType extends BaseTime {
   @PrimaryGeneratedColumn()
   id: string;
