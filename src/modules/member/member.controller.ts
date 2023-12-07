@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto } from './dto/update-member.dto';
+import { UpdateMemberDto, UpdateUserMemberDto } from './dto/update-member.dto';
 import { Public } from 'src/common/decorators/public.decorator';
 
 @ApiTags('Member')
@@ -39,8 +39,17 @@ export class MemberController {
     return this.memberService.update(name, updateMemberDto);
   }
 
-  @Post(':name')
+  @Post('del/:name')
   remove(@Param('name') name: string) {
     return this.memberService.remove(name);
+  }
+
+  @Public()
+  @Post('joinMembership')
+  @ApiOperation({
+    summary: '开通会员',
+  })
+  joinMembership(@Body() payload: UpdateUserMemberDto) {
+    return this.memberService.joinMembership(payload);
   }
 }

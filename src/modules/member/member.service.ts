@@ -2,9 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto } from './dto/update-member.dto';
+import { UpdateMemberDto, UpdateUserMemberDto } from './dto/update-member.dto';
 import { Member } from './entities/member.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
+import { User } from 'src/core/user/entities/user.entity';
+import { UserMembership } from './entities/user-membership.entity';
 
 @Injectable()
 export class MemberService {
@@ -90,5 +92,53 @@ export class MemberService {
     existingMember.delete_flag = 1;
     existingMember.delete_time = new Date();
     await this.memberRepository.save(existingMember);
+  }
+
+  async joinMembership(payload: UpdateUserMemberDto): Promise<void> {
+    const { username, memberList } = payload;
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+
+    // 创建事务的异步方法
+    await queryRunner.startTransaction();
+
+    const user: User = await queryRunner.manager.findOne(User, {
+      where: {
+        username,
+      },
+    });
+
+    const userMembershipRepository =
+      queryRunner.manager.getRepository(UserMembership);
+
+    const oneMonthLater = new Date();
+    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+
+    const members = await queryRunner.manager.find(Member, {
+      where: {
+        member_code: In(memberList),
+      },
+    });
+
+    console.log(members);
+
+    for (const m of members) {
+      const userMembership = new UserMembership();
+
+      userMembership.userId = user.id;
+      userMembership.service_start_time = new Date();
+      userMembership.service_end_time = oneMonthLater;
+      userMembership.memberId = m.id;
+      userMembership.order = -1;
+      await userMembershipRepository.save(userMembership);
+    }
+
+    // 提交事务
+    await queryRunner.commitTransaction();
+
+    console.log(user.id);
+    console.log(username, memberList);
   }
 }
