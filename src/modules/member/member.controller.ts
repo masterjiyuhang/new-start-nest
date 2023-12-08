@@ -1,9 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
+import type { Request } from 'express';
+
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto, UpdateUserMemberDto } from './dto/update-member.dto';
+import {
+  AddUserMemberDto,
+  UpdateMemberDto,
+  UpdateUserMemberDto,
+} from './dto/update-member.dto';
 import { Public } from 'src/common/decorators/public.decorator';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @ApiTags('Member')
 @Controller('member')
@@ -44,10 +61,20 @@ export class MemberController {
     return this.memberService.remove(name);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('addMembership')
+  @ApiOperation({
+    summary: '开通会员',
+  })
+  addUserMember(@Req() req: Request, @Body() payload: AddUserMemberDto) {
+    console.log(req);
+    return this.memberService.addUserMember(payload, req);
+  }
+
   @Public()
   @Post('joinMembership')
   @ApiOperation({
-    summary: '开通会员',
+    summary: '根据用户名开通会员',
   })
   joinMembership(@Body() payload: UpdateUserMemberDto) {
     return this.memberService.joinMembership(payload);

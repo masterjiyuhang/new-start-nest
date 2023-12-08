@@ -10,3 +10,8 @@ export class UpdateUserMemberDto {
   @IsNotEmpty()
   readonly memberList: string[];
 }
+
+export class AddUserMemberDto {
+  @IsNotEmpty()
+  readonly member_code: string;
+}

@@ -13,4 +13,6 @@ export enum ApiErrorCode {
 
   CAR_TYPE_EXIST = 10006, // 车辆类型已存在
   CAR_EXIST = 10007, // 车辆类型已存在
+
+  USER_MEMBER_EXIST = 10011, // 用户会员记录已存在
 }

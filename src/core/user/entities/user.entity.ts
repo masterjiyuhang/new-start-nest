@@ -34,13 +34,7 @@ export class User extends BaseTime {
   roles: Role[];
 
   @OneToMany(() => UserMembership, (userMemberShip) => userMemberShip.user)
-  // @JoinTable({
-  //   name: 'user_member_relation',
-  //   joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-  //   inverseJoinColumn: { name: 'member_id', referencedColumnName: 'id' },
-  //   synchronize: true,
-  // })
-  public userMembership: UserMembership[];
+  public userMembership: Array<UserMembership>;
 
   // 将实体对象转换为纯对象时，排除不想暴露的属性
   toResponseObject(): Record<string, any> {

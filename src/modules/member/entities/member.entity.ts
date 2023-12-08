@@ -50,5 +50,5 @@ export class Member extends BaseTime {
     inverseJoinColumn: { name: 'user_id', referencedColumnName: 'id' },
     synchronize: true,
   })
-  public userMembership: UserMembership[];
+  public userMembership: Array<UserMembership>;
 }

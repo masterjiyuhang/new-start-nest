@@ -1,15 +1,17 @@
-import { User } from 'src/core/user/entities/user.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  VersionColumn,
 } from 'typeorm';
 import { Member } from './member.entity';
+import { User } from '../../../core/user/entities/user.entity';
+import { BaseTime } from '../../../common/entity/BaseEntity';
 
 @Entity('user_member_relation')
-export class UserMembership {
+export class UserMembership extends BaseTime {
   @PrimaryGeneratedColumn({
     comment: '主键ID',
   })
@@ -36,13 +38,16 @@ export class UserMembership {
   @Column({ type: 'timestamp', nullable: true, comment: '会员服务结束时间' })
   service_end_time: Date;
 
-  @ManyToOne(() => User, (user) => user.userMembership)
+  @VersionColumn()
+  version: string;
+
+  @ManyToOne(() => User, (user: User) => user.userMembership)
   @JoinColumn({
     name: 'user_id',
   })
   user: User;
 
-  @ManyToOne(() => Member, (member) => member.userMembership)
+  @ManyToOne(() => Member, (member: Member) => member.userMembership)
   @JoinColumn({
     name: 'member_id',
   })
