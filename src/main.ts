@@ -36,7 +36,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: '127.0.0.1',
+    origin: ['127.0.0.1', process.env.ENABLE_DOMAIN],
   });
 
   // 设置全局前缀
