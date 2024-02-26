@@ -29,7 +29,7 @@ describe('CarController', () => {
         },
       ];
 
-      jest.spyOn(carService, 'findAll').mockImplementation(() => result);
+      jest.spyOn(carService, 'findAll').mockImplementation((): any => result);
       expect(await carController.findAll()).toBe(result);
     });
   });

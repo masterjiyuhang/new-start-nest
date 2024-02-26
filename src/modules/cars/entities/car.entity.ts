@@ -10,6 +10,11 @@ import { CarType } from 'src/modules/car-type/entities/car-type.entity';
 
 import { BaseTime } from '../../../common/entity/BaseEntity';
 
+enum TransmissionType {
+  NORMAL = 0,
+  AUTO = 1,
+  MANUAL = 2,
+}
 @Entity('car')
 export class Car extends BaseTime {
   @Exclude()
@@ -29,11 +34,9 @@ export class Car extends BaseTime {
   color: string;
 
   @Column({
-    length: 30,
-    enum: {
-      '1': '自动',
-      '2': '手动',
-    },
+    type: 'enum',
+    enum: TransmissionType,
+    comment: '1: 自动， 2: 手动',
   })
   transmission: string;
 
