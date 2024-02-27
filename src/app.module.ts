@@ -43,7 +43,11 @@ import { MemberModule } from './modules/member/member.module';
         const dbConfig = {
           ...config.get<TypeOrmModuleOptions>('baseConfig')['db'],
         };
-        // console.log('Database connection configuration:', dbConfig);
+        console.log(
+          'Database connection configuration:',
+          process.env,
+          dbConfig,
+        );
         return dbConfig;
       },
       inject: [ConfigService],
