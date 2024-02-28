@@ -25,6 +25,11 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
 import { MemberModule } from './modules/member/member.module';
 
+const envConfig = {
+  dev: '.env.dev',
+  prod: '.env.prod',
+};
+
 @Module({
   imports: [
     ThrottlerModule.forRoot([
@@ -36,6 +41,7 @@ import { MemberModule } from './modules/member/member.module';
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: envConfig[process.env.NODE_ENV] || '.env',
       load: [baseConfig, defaultConfig],
     }),
     TypeOrmModule.forRootAsync({
@@ -43,11 +49,7 @@ import { MemberModule } from './modules/member/member.module';
         const dbConfig = {
           ...config.get<TypeOrmModuleOptions>('baseConfig')['db'],
         };
-        console.log(
-          'Database connection configuration:',
-          process.env,
-          dbConfig,
-        );
+        console.log(process.env.NODE_ENV);
         return dbConfig;
       },
       inject: [ConfigService],

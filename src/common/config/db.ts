@@ -3,7 +3,7 @@ export const db = {
   synchronize: true, //是否自动同步实体文件,生产环境建议关闭
   logging: true,
   host: 'localhost',
-  port: 3307,
+  port: 3306,
   username: 'root',
   password: 'password',
   database: 'management',
