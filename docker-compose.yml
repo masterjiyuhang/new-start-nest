@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql_demo:
+    container_name: mysql_demo
+    image: mysql:8.3.0
+    restart: on-failure # 自动重启
+    environment:
+      MYSQL_DATABASE: management
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - data:/var/lib/mysql # 使用定义的卷
+      - data:/deploy/mysql/conf/my.cnf:/etc/my.cnf # 存放自定义的配置文件
+      - data:/deploy/mysql/init:/docker-entrypoint-initdb.d/ # 存放初始化的脚本
+
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3308:3306
+    networks:
+      - cch-server
+  server: # 服务
+    container_name: cch_server_demo
+    build: # 根据Dockerfile构建镜像
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env.prod
+    ports:
+      - 3234:3234
+    restart: on-failure # 设置自动重启，这一步必须设置，主要是存在mysql还没有启动完成就启动了node服务
+    networks:
+      - cch-server
+    depends_on: # node服务依赖于mysql和redis
+      - mysql_demo
+
+# 定义卷
+volumes:
+  data:
+
+# 声明一下网桥  my-server。
+# 重要：将所有服务都挂载在同一网桥即可通过容器名来互相通信了
+networks:
+  cch-server:
+    driver: bridge
