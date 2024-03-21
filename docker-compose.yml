@@ -13,10 +13,32 @@ services:
       - data:/var/lib/mysql # 使用定义的卷
       - data:/deploy/mysql/conf/my.cnf:/etc/my.cnf # 存放自定义的配置文件
       - data:/deploy/mysql/init:/docker-entrypoint-initdb.d/ # 存放初始化的脚本
-
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - 3308:3306
+    networks:
+      - cch-server
+  test-mysql:
+    container_name: test_mysql
+    image: mysql:8.3.0
+    environment:
+      MYSQL_DATABASE: management_test
+      MYSQL_ROOT_PASSWORD: password
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - '3307:3306' # 将宿主机的 3307 端口映射到容器的 3306 端口
+  redis-demo:
+    container_name: redis_demo
+    image: redis:5-alpine
+    restart: always
+    volumes:
+      - ./deploy/redis/db:/data # 把持久化数据挂载到宿主机
+      - ./deploy/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf # 把redis的配置文件挂载到宿主机
+      - ./deploy/redis/logs:/logs # 用来存放日志
+    ports:
+      - 6379:6379
+    environment:
+      - TZ=Asia/Shanghai # 解决容器 时区的问题
     networks:
       - cch-server
   server: # 服务
