@@ -76,7 +76,7 @@ export class AuthService {
   refreshToken(token: string) {
     try {
       const { userId } = this.jwtService.verify(token, {
-        secret: this.configService.get('JWT_REFRESH_SECRET'),
+        secret: this.configService.get('jwtRefreshSecret'),
       });
 
       return this.generateTokens({
