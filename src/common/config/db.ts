@@ -1,6 +1,6 @@
 export const db = {
   type: 'mysql',
-  synchronize: true, //是否自动同步实体文件,生产环境建议关闭
+  synchronize: false, //是否自动同步实体文件,生产环境建议关闭
   logging: true,
   host: 'localhost',
   port: 3306,

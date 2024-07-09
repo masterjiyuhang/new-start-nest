@@ -24,7 +24,6 @@ import { UploadModule } from './modules/upload/upload.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
 import { MemberModule } from './modules/member/member.module';
-// import fs = require('fs');
 
 const envConfig = {
   dev: '.env.dev',
@@ -53,14 +52,6 @@ const envConfig = {
         const dbConfig = {
           ...config.get<TypeOrmModuleOptions>('baseConfig')['db'],
         };
-        // fs.writeFileSync(
-        //   'ormconfig.json',
-        //   JSON.stringify(
-        //     config.get<TypeOrmModuleOptions>('baseConfig')['db'],
-        //     null,
-        //     2,
-        //   ),
-        // );
         return dbConfig;
       },
     }),

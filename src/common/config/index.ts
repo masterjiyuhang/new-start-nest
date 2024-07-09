@@ -5,6 +5,7 @@ export const jwtConstants = {
   secret:
     'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
 };
+
 export const baseConfig = registerAs('baseConfig', () => ({
   port: process.env.PORT || 3000,
   db: {
@@ -14,6 +15,11 @@ export const baseConfig = registerAs('baseConfig', () => ({
     port: process.env.DATABASE_PORT,
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
+    logging: true,
+    entities: ['dist/**/*.entity.js'],
+    migrations: ['dist/**/migrations/*.js'],
+    migrationsTableName: 'migration-history',
+    migrationsRun: true,
   },
 }));
 
