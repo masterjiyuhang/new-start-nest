@@ -9,6 +9,7 @@ export const baseConfig = registerAs('baseConfig', () => ({
   port: process.env.PORT || 3000,
   db: {
     ...db,
+    database: process.env.DATABASE_NAME,
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,
     username: process.env.DATABASE_USER,

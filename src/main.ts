@@ -10,6 +10,14 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
+  console.log(
+    '🚀 ~ file: main.ts:72 ~ process.env.NODE_ENV:',
+    process.env.NODE_ENV,
+  );
+  console.log(
+    '🚀 ~ file: main.ts:72 ~ process.env.NODE_ENV:',
+    process.env.DATABASE_NAME,
+  );
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
     // logger: ['error', 'warn'],
@@ -67,4 +75,5 @@ async function bootstrap() {
     `Application is running on: ${await app.getUrl()}`,
   );
 }
+
 bootstrap();
