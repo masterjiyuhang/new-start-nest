@@ -1,27 +1,39 @@
 import { registerAs } from '@nestjs/config';
-import { db } from './db';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export const jwtConstants = {
   secret:
     'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
 };
 
-export const baseConfig = registerAs('baseConfig', () => ({
-  port: process.env.PORT || 3000,
-  db: {
-    ...db,
-    database: process.env.DATABASE_NAME,
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    username: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    logging: true,
-    entities: ['dist/**/*.entity.js'],
-    migrations: ['dist/**/migrations/*.js'],
-    migrationsTableName: 'migration-history',
-    migrationsRun: true,
-  },
-}));
+type ZZBZaseConfig = {
+  port: number;
+  db: TypeOrmModuleOptions;
+};
+
+export const baseConfig = registerAs(
+  'baseConfig',
+  (): ZZBZaseConfig => ({
+    port: +process.env.PORT || 3000,
+    db: {
+      type: 'mysql',
+      synchronize: false, //是否自动同步实体文件,生产环境建议关闭
+      connectTimeout: 30000,
+      database: process.env.DATABASE_NAME,
+      host: process.env.DATABASE_HOST,
+      port: +process.env.DATABASE_PORT,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      logging: true,
+      entities: ['dist/**/*.entity.js'],
+      migrations: ['dist/**/migrations/*.js'],
+      migrationsTableName: 'migration-history',
+      migrationsRun: true,
+      timezone: '+08:00',
+      autoLoadEntities: true,
+    },
+  }),
+);
 
 export const defaultConfig = () => ({
   ...jwtConstants,
