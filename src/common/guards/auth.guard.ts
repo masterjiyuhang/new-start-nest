@@ -36,12 +36,13 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    console.log('global auth guard is executed,');
+    console.log('global auth guard is executed.');
 
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: defaultConfig().jwtSecret,
       });
+
       const { userId } = payload;
       const currentUser = await this.usersService.findByUserId(userId);
       const { roles, permissions } =
@@ -52,7 +53,10 @@ export class AuthGuard implements CanActivate {
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request['user'] = currentUser;
-    } catch {
+    } catch (err) {
+      if (err.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('token expired');
+      }
       throw new UnauthorizedException();
     }
     return true;

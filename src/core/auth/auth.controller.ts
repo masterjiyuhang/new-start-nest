@@ -37,7 +37,6 @@ export class AuthController {
   }
 
   @Get('check')
-  // @UseGuards(AuthGuard)
   @UseGuards(JwtAuthGuard)
   public check(@Req() req: any): User {
     return req.user.toResponseObject();
