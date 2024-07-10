@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { BaseTime } from 'src/common/entity/BaseEntity';
+import { BaseDTO } from 'src/common/entity/BaseEntity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
@@ -8,7 +8,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
     create_time: 'ASC',
   },
 })
-export class CarType extends BaseTime {
+export class CarType extends BaseDTO {
   @PrimaryGeneratedColumn()
   id: string;
 

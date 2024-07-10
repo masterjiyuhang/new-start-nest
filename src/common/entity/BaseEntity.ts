@@ -1,6 +1,7 @@
 import { Exclude, Transform } from 'class-transformer';
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
@@ -27,4 +28,28 @@ export abstract class BaseTime extends BaseEntity {
   @Exclude()
   @DeleteDateColumn({ type: 'timestamp', nullable: false })
   delete_time: Date;
+}
+
+export abstract class BaseDTO extends BaseTime {
+  @Exclude()
+  @Column({
+    type: String,
+    comment: '创建人ID',
+  })
+  creator_id: string;
+
+  @Exclude()
+  @Column({
+    type: String,
+    comment: '操作人ID',
+  })
+  operator_id: string;
+
+  @Exclude()
+  @Column({
+    type: Number,
+    default: 0,
+    comment: '0: 正常, 1: 已删除',
+  })
+  delete_flag: number;
 }
