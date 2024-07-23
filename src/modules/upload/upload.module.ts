@@ -12,8 +12,6 @@ import { UploadController } from './upload.controller';
       storage: diskStorage({
         destination: join(__dirname, '../../images'),
         filename: (_err, file, callback) => {
-          const r = join(__dirname, '../../images');
-          console.log('🚀 ~ file: upload.module.ts:16 ~ r:', r);
           const filename = `${new Date().getTime()}${extname(
             file.originalname,
           )}`;

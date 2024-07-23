@@ -35,7 +35,7 @@ export class UploadController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 1000 }),
+          new MaxFileSizeValidator({ maxSize: 100000 }),
           new FileTypeValidator({ fileType: 'image/jpeg' }),
         ],
       }),
@@ -44,7 +44,7 @@ export class UploadController {
   ) {
     return {
       body,
-      file: file.buffer.toString(),
+      file: readFileSync(file.path, 'utf-8'),
     };
   }
 
@@ -72,8 +72,20 @@ export class UploadController {
   }
 
   @Post()
-  create(@Body() createUploadDto: CreateUploadDto) {
-    return this.uploadService.create(createUploadDto);
+  @UseInterceptors(FileInterceptor('file'))
+  create(
+    @Body() createUploadDto: CreateUploadDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    console.log(
+      '🚀 ~ file: upload.controller.ts:76 ~ UploadController ~ create ~ createUploadDto:',
+      createUploadDto,
+      file,
+    );
+    // return this.uploadService.create(createUploadDto);
+    return {
+      name: 'Upload',
+    };
   }
 
   @Get('test')
