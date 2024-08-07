@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Req } from '@nestjs/common';
 import { CarTypeService } from './car-type.service';
 import { CreateCarTypeDto } from './dto/create-car-type.dto';
 import { UpdateCarTypeDto } from './dto/update-car-type.dto';
@@ -11,8 +11,9 @@ export class CarTypeController {
   constructor(private readonly carTypeService: CarTypeService) {}
 
   @Post('create')
-  create(@Body() createCarTypeDto: CreateCarTypeDto) {
-    return this.carTypeService.create(createCarTypeDto);
+  async create(@Req() req: any, @Body() createCarTypeDto: CreateCarTypeDto) {
+    const result = await this.carTypeService.create(createCarTypeDto, req.user);
+    return result;
   }
 
   @Get('all')

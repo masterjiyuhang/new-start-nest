@@ -1,3 +1,4 @@
+import { User } from 'src/core/user/entities/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCarTypeDto } from './dto/create-car-type.dto';
 import { UpdateCarTypeDto } from './dto/update-car-type.dto';
@@ -6,6 +7,7 @@ import { CarType } from './entities/car-type.entity';
 import { Repository } from 'typeorm';
 import { ApiException } from 'src/common/filters/exception-list';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class CarTypeService {
@@ -13,8 +15,7 @@ export class CarTypeService {
     @InjectRepository(CarType)
     private carTypeRepository: Repository<CarType>,
   ) {}
-  async create(createCarTypeDto: CreateCarTypeDto) {
-    // return 'This action adds a new carType';
+  async create(createCarTypeDto: CreateCarTypeDto, user: User) {
     const { car_type_name, car_type_code, car_type_desc } = createCarTypeDto;
     const existCarType = await this.carTypeRepository.findOne({
       where: { car_type_name },
@@ -23,10 +24,16 @@ export class CarTypeService {
     if (existCarType)
       throw new ApiException('车辆类型已存在', ApiErrorCode.CAR_TYPE_EXIST);
 
-    return this.carTypeRepository.save({
+    const carType = await this.carTypeRepository.save({
       car_type_name,
       car_type_code,
       car_type_desc,
+      creator_id: user.id + '',
+      operator_id: user.id + '',
+    });
+
+    return plainToInstance(CreateCarTypeDto, carType, {
+      excludeExtraneousValues: true,
     });
   }
 
