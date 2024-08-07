@@ -30,6 +30,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
             'HTTP context does not contain a valid request object.',
           );
         }
+        return request;
       }
     } catch (error) {
       // 异常处理

@@ -14,7 +14,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Public } from '../../common/decorators/public.decorator';
 // import { AuthGuard } from 'src/common/guards/auth.guard';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { User } from '../user/entities/user.entity';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 
