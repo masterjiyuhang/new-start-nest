@@ -36,17 +36,17 @@ export class Car extends BaseTime {
   @Column({
     type: 'enum',
     enum: TransmissionType,
-    comment: '1: 自动， 2: 手动  3:未知',
+    comment: '1:自动 2:手动 3:未知',
   })
   transmission: string;
 
   @Column({ type: Boolean })
   is_over_load: boolean;
 
-  @Column({ type: String, comment: '售卖平台名称' })
+  @Column({ type: String, comment: '售卖平台名称', default: '大白菜' })
   platform: string;
 
-  @Column({ type: String, comment: '售卖平台id' })
+  @Column({ type: String, comment: '售卖平台Id', default: '1' })
   platform_id: string;
 
   @Column({

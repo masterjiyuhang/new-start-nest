@@ -24,7 +24,7 @@ export const baseConfig = registerAs(
       port: +process.env.DATABASE_PORT,
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
-      logging: true,
+      logging: false,
       entities: ['dist/**/*.entity.js'],
       migrations: ['dist/**/migrations/*.js'],
       migrationsTableName: 'migration-history',
