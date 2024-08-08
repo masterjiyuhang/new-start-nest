@@ -6,20 +6,29 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { PermissionService } from './permission.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { CreatorIdInterceptor } from 'src/common/interceptors/creator-id.interceptor';
+import { OperatorIdInterceptor } from 'src/common/interceptors/operator_id.interceptor';
 
 @ApiTags('Permission')
 @Controller('permission')
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 
-  @Post()
-  async create(@Body() createPermissionDto: CreatePermissionDto) {
-    return this.permissionService.create(createPermissionDto);
+  @Post('create')
+  @UseInterceptors(CreatorIdInterceptor, OperatorIdInterceptor)
+  // TODO: 继续研究 creator_id operator_id 的使用方式
+  async create(
+    @Body() createPermissionDto: CreatePermissionDto,
+    @Req() req: Request,
+  ) {
+    return this.permissionService.create(createPermissionDto, req);
   }
 
   @Get()

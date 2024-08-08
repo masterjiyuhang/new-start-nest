@@ -1,8 +1,8 @@
-import { BaseTime } from 'src/common/entity/BaseEntity';
+import { BaseDTO } from 'src/common/entity/BaseEntity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Permission extends BaseTime {
+export class Permission extends BaseDTO {
   @PrimaryGeneratedColumn()
   id: string;
 
