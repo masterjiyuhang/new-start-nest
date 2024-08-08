@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npm run start:debug",
+      "command": "npm run start:local",
       "name": "RUN DEBUG",
       "request": "launch",
       "type": "node-terminal"
@@ -25,7 +25,6 @@
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal"
-    },
-    
+    }
   ]
 }

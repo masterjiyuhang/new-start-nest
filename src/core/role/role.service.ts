@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
@@ -38,19 +38,47 @@ export class RoleService {
     return this.roleRepository.save({ permissions, name, desc, code });
   }
 
-  findAll() {
-    return `This action returns all role`;
+  async findAll(
+    page: number,
+    limit: number,
+    name?: string,
+    code?: string,
+  ): Promise<[Role[], number]> {
+    const queryBuilder = this.roleRepository.createQueryBuilder('role');
+
+    if (name) {
+      queryBuilder.andWhere('role.name LIKE :name', { name: `%${name}%` });
+    }
+    if (code) {
+      queryBuilder.andWhere('role.code LIKE :code', { code: `%${code}%` });
+    }
+
+    queryBuilder.skip(page * limit).take(limit);
+
+    const [result, total] = await queryBuilder.getManyAndCount();
+    return [result, total];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
+  async findOne(id: string): Promise<Role> {
+    const role = await this.roleRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!role) {
+      throw new NotFoundException(`Role with ID ${id} not found`);
+    }
+    return role;
   }
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role ${updateRoleDto}`;
+  async update(id: string, updateRoleDto: UpdateRoleDto): Promise<Role> {
+    const role = await this.findOne(id);
+    this.roleRepository.merge(role, updateRoleDto);
+    return this.roleRepository.save(role);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  async delete(id: string): Promise<void> {
+    const role = await this.findOne(id);
+    await this.roleRepository.remove(role);
   }
 }
