@@ -8,6 +8,9 @@ import {
   Delete,
   UseInterceptors,
   Req,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PermissionService } from './permission.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
@@ -23,7 +26,6 @@ export class PermissionController {
 
   @Post('create')
   @UseInterceptors(CreatorIdInterceptor, OperatorIdInterceptor)
-  // TODO: 继续研究 creator_id operator_id 的使用方式
   async create(
     @Body() createPermissionDto: CreatePermissionDto,
     @Req() req: Request,
@@ -31,9 +33,21 @@ export class PermissionController {
     return this.permissionService.create(createPermissionDto, req);
   }
 
-  @Get()
-  findAll() {
-    return this.permissionService.findAll();
+  @Get('list')
+  async findAll(
+    @Query('page', new DefaultValuePipe(0), ParseIntPipe) page?: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Query('name') name?: string,
+  ) {
+    const [list, total] = await this.permissionService.findAll(
+      page,
+      limit,
+      name,
+    );
+    return {
+      list,
+      total,
+    };
   }
 
   @Get(':name')

@@ -37,8 +37,23 @@ export class PermissionService {
     });
   }
 
-  findAll() {
-    return `This action returns all permission`;
+  async findAll(
+    page: number,
+    limit: number,
+    name?: string,
+  ): Promise<[Permission[], number]> {
+    const queryBuilder =
+      this.permissionRepository.createQueryBuilder('permission');
+    if (name) {
+      queryBuilder.andWhere('permission.name LIKE :name', {
+        name: `%${name}%`,
+      });
+    }
+
+    queryBuilder.skip(page * limit).take(limit);
+
+    const [result, total] = await queryBuilder.getManyAndCount();
+    return [result, total];
   }
 
   async findOne(name: string) {
