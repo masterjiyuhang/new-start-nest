@@ -6,7 +6,7 @@ import type { AxiosError } from 'axios';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Car } from './entities/car.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ApiException } from 'src/common/filters/exception-list';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
 import { CarType } from '../car-type/entities/car-type.entity';
@@ -90,13 +90,23 @@ export class CarService {
     });
   }
 
-  async findListByName(name: string): Promise<Car[]> {
-    return await this.carRepository.find({
-      where: {
-        // 在数据库中进行模糊查询时，通常使用 % 符号表示通配符，它匹配任意字符序列
-        title: Like(`%${name}%`),
-      },
-    });
+  async findListByName(
+    page: number,
+    limit: number,
+    name?: string,
+  ): Promise<[Car[], number]> {
+    const queryBuilder = this.carRepository.createQueryBuilder('car');
+
+    if (name) {
+      queryBuilder.andWhere('car.title LIKE :title', {
+        title: `%${name}%`,
+      });
+    }
+
+    queryBuilder.skip(page * limit).take(limit);
+
+    const [result, total] = await queryBuilder.getManyAndCount();
+    return [result, total];
   }
 
   async testAxios(token: string) {

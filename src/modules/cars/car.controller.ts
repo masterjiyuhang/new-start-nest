@@ -4,6 +4,7 @@ import {
   DefaultValuePipe,
   Get,
   Header,
+  HttpCode,
   HttpException,
   HttpStatus,
   Param,
@@ -80,14 +81,29 @@ export class CarController {
     return car;
   }
 
-  @Get('getListByName')
+  @Post('getListByName')
   @ApiParam({
     name: '汽车名称',
     type: String,
     description: '根据汽车名称进行模糊查询',
   })
-  async getListByName(@Body('name') name: string) {
-    return await this.carService.findListByName(name);
+  @HttpCode(HttpStatus.OK)
+  async getListByName(
+    @Query('page', new DefaultValuePipe(0), ParseIntPipe) page?: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Body('name') name?: string,
+  ) {
+    const [list, total] = await this.carService.findListByName(
+      page,
+      limit,
+      name,
+    );
+    return {
+      list,
+      total,
+      page: page + 1,
+      size: limit,
+    };
   }
 
   @Get('testAxios')
