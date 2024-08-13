@@ -14,6 +14,7 @@ import {
   Query,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateCarDto } from './dto/create-car.dto';
@@ -27,6 +28,7 @@ import { Public } from '../../common/decorators/public.decorator';
 import { CarByNamePipe } from '../../common/pipes/CarByName.pipe';
 import { Request } from 'express';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { NoCacheInterceptor } from 'src/common/interceptors/cache.interceptor';
 
 @ApiTags('Car')
 @UseGuards(RolesGuard)
@@ -36,6 +38,7 @@ export class CarController {
   constructor(private readonly carService: CarService) {}
 
   @Get('list')
+  @UseInterceptors(NoCacheInterceptor)
   // @Roles(roleEnums.ADMIN, roleEnums.SUPER_ADMIN)
   async findAll(
     @Query('isOverload', new DefaultValuePipe(true), ParseBoolPipe)
