@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, Length, IsEmail } from 'class-validator';
+import { IsNotEmpty, Length, IsEmail, IsEnum } from 'class-validator';
 import { IsNotBlacklistedDomainConstraint } from 'src/common/customerValidate';
+import { roleEnums } from '../../../common/enums/role.enums';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -31,4 +32,24 @@ export class CreateUserDto {
     description: '角色id',
   })
   roleIds: number[]; // 默认为普通用户
+}
+
+export class CreateAdminDto extends CreateUserDto {
+  @ApiProperty()
+  @IsEnum(roleEnums)
+  readonly role: roleEnums;
+}
+
+export class DefaultColumnResponse extends CreateUserDto {
+  @ApiProperty()
+  readonly id: number;
+
+  @ApiProperty()
+  readonly createdAt: Date;
+
+  @ApiProperty()
+  readonly updatedAt: Date;
+
+  @ApiProperty()
+  readonly role: roleEnums;
 }

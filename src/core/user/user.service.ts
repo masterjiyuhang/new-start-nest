@@ -8,9 +8,10 @@ import { comparePassword, hashPassword } from '../../common/utils/bcrypt';
 import { User } from './entities/user.entity';
 import { ApiException } from 'src/common/filters/exception-list';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateAdminDto, CreateUserDto } from './dto/create-user.dto';
 import { Role } from '../role/entities/role.entity';
 import { roleEnums } from 'src/common/enums/role.enums';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 // This should be a real class/interface representing a user entity
 
@@ -32,7 +33,7 @@ export class UserService {
     });
   }
 
-  async createUser(payload: CreateUserDto): Promise<string> {
+  async createUser(payload: CreateUserDto | CreateAdminDto): Promise<string> {
     const { username, password, email, roleIds } = payload;
     // 默认给注册的用户赋值普通用户角色
     const rolesIdList = roleIds || [roleEnums.USER];
@@ -62,10 +63,14 @@ export class UserService {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  async findAll() {
+    return this.userRepository.find();
+  }
 
   async findByUsername(username: string): Promise<User | undefined> {
     const user = await this.userRepository.findOne({
-      where: { username: username },
+      select: ['id', 'password'],
+      where: { username },
     });
     if (!user) {
       throw new HttpException('用户名不存在~~~~', HttpStatus.NOT_FOUND);
@@ -83,6 +88,12 @@ export class UserService {
       throw new ApiException('用户不存在', ApiErrorCode.USER_NOT_EXIST);
 
     return user;
+  }
+
+  async findByEmail(email: string) {
+    return await this.userRepository.findOneOrFail({
+      where: { email },
+    });
   }
 
   async findRoleOrPermissionByUserId(
@@ -113,5 +124,18 @@ export class UserService {
 
   validatePassword(password: string, hashedPassword: string): Promise<boolean> {
     return comparePassword(password, hashedPassword);
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.preload({
+      id,
+      ...updateUserDto,
+    });
+
+    if (user) {
+      return await this.userRepository.save(user);
+    } else {
+      throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
+    }
   }
 }

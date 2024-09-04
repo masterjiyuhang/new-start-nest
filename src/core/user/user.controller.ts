@@ -10,6 +10,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiOperation({
+    summary: '注册普通用户接口', // 接口描述信息
+  })
   @Public()
   @Post('register')
   @ApiOperation({
