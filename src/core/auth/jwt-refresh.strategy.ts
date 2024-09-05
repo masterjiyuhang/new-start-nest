@@ -1,27 +1,28 @@
-import { Strategy, ExtractJwt } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from './auth.service';
-import { JwtDto } from './dto/jwt.dto';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from '../user/entities/user.entity';
+import { JwtDto } from './dto/jwt.dto';
+import { AuthService } from './auth.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtRefreshTokenStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh-token',
+) {
   constructor(
     private readonly authService: AuthService,
     readonly configService: ConfigService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: configService.get('jwtSecret'),
+      secretOrKey: configService.get('jwtRefreshSecret'),
+      passReqToCallBack: true,
     });
-    console.log('JwtStrategy is being executed!');
   }
 
   async validate(payload: JwtDto): Promise<User> {
-    console.log('now you must be executed!!!!!', payload);
     const user = await this.authService.validateUser(payload.userId);
     if (!user) {
       throw new UnauthorizedException();

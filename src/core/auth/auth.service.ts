@@ -49,6 +49,15 @@ export class AuthService {
     return this.usersService.findByUserId(id);
   }
 
+  /**
+   * 生成访问令牌和刷新令牌
+   *
+   * 此方法接受一个包含用户ID的对象，并生成一对令牌：访问令牌和刷新令牌
+   * 访问令牌用于验证用户对受保护资源的访问权限，而刷新令牌用于在访问令牌过期时请求新的访问令牌
+   *
+   * @param payload 包含用户ID的负载对象，用于生成令牌
+   * @returns 返回一个包含访问令牌和刷新令牌的对象
+   */
   generateTokens(payload: { userId: number }): Token {
     return {
       accessToken: this.generateAccessToken(payload),
@@ -73,16 +82,28 @@ export class AuthService {
     return RefreshToken;
   }
 
-  refreshToken(token: string) {
+  /**
+   * 从刷新令牌生成访问令牌
+   * @param token 用户的刷新令牌
+   * @returns 返回生成的访问令牌
+   *
+   * 此方法首先使用JWT（Json Web Token）服务验证传入的刷新令牌
+   * 验证通过后，从刷新令牌中提取用户ID，然后基于用户ID生成新的访问令牌
+   * 如果令牌验证失败，抛出UnauthorizedException异常，指示未经授权的访问尝试
+   */
+  refreshToken(user: User) {
     try {
-      const { userId } = this.jwtService.verify(token, {
-        secret: this.configService.get('jwtRefreshSecret'),
-      });
+      // 验证刷新令牌并提取用户ID
+      // const { userId } = this.jwtService.verify(token, {
+      //   secret: this.configService.get('jwtRefreshSecret'),
+      // });
 
+      // 根据用户ID生成并返回访问令牌
       return this.generateTokens({
-        userId,
+        userId: user.id,
       });
     } catch (e) {
+      // 如果令牌验证失败，抛出未经授权异常
       throw new UnauthorizedException();
     }
   }

@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -52,4 +53,19 @@ export abstract class BaseDTO extends BaseTime {
     comment: '0: 正常, 1: 已删除',
   })
   delete_flag: number;
+}
+
+export class DefaultEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updated_at',
+  })
+  updatedAt: Date;
 }
