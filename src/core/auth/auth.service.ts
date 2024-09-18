@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
+  // NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { Token } from './dto/token.dto';
 import { User } from '../user/entities/user.entity';
+// import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,10 @@ export class AuthService {
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
-      throw new NotFoundException(`No user found for username: ${username}`);
+      // throw new NotFoundException(`No user found for username: ${username}`);
+      throw new BadRequestException(
+        `Username/Email/Password is wrong or does not exist. please check it and try again`,
+      );
     }
 
     const passwordValid = await this.usersService.validatePassword(
@@ -32,7 +36,10 @@ export class AuthService {
     );
 
     if (!passwordValid) {
-      throw new BadRequestException('Invalid password');
+      // throw new BadRequestException('Invalid password');
+      throw new BadRequestException(
+        `Username/Email/Password is wrong or does not exist. please check it and try again`,
+      );
     }
 
     return this.generateTokens({
