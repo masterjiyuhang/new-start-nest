@@ -24,6 +24,7 @@ import { UploadModule } from './modules/upload/upload.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
 import { MemberModule } from './modules/member/member.module';
+import { DogsModule } from './modules/dogs/dogs.module';
 
 const envConfig = {
   dev: '.env.dev',
@@ -62,6 +63,7 @@ const envConfig = {
     UploadModule,
     TasksModule,
     MemberModule,
+    DogsModule,
   ],
   controllers: [AppController],
   providers: [
