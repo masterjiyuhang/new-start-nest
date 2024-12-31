@@ -10,9 +10,14 @@ import { AuthGuard } from '../../common/guards/auth.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtRefreshTokenStrategy } from './jwt-refresh.strategy';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule.register({
+      timeout: 20000,
+      maxRedirects: 3,
+    }),
     UserModule,
     PassportModule,
     JwtModule.registerAsync({

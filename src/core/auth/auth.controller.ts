@@ -59,4 +59,14 @@ export class AuthController {
     );
     return this.authService.refreshToken(req.user);
   }
+
+  @Public()
+  @Post('wecheat')
+  public authWeCheat(@Body() body: any): any {
+    console.log(
+      '🍉 ~ file: auth.controller.ts:66 ~ AuthController ~ authWeCheat ~ body:',
+      body,
+    );
+    return this.authService.authWeCheat(body.code);
+  }
 }

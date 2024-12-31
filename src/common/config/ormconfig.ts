@@ -15,7 +15,7 @@ export const ormconfig: DataSourceOptions = {
   port: +process.env.DATABASE_PORT ?? 3306,
   username: process.env.DATABASE_USER ?? 'root',
   password: process.env.DATABASE_PASSWORD ?? 'b97ac43c76681530',
-  database: process.env.DATABASE_NAME ?? 'management_dev',
+  database: process.env.DATABASE_NAME ?? 'management_local',
   synchronize: false,
   bigNumberStrings: true,
   multipleStatements: true,

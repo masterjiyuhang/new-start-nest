@@ -40,6 +40,29 @@ export class CreateAdminDto extends CreateUserDto {
   readonly role: roleEnums;
 }
 
+export class WeChatUserDto {
+  @ApiProperty()
+  readonly openid: string;
+
+  @ApiProperty()
+  readonly nickname: string;
+
+  @ApiProperty()
+  readonly avatarUrl: string;
+
+  // @ApiProperty()
+  // readonly gender: number;
+
+  // @ApiProperty()
+  // readonly country: string;
+
+  // @ApiProperty()
+  // readonly province: string;
+
+  // @ApiProperty()
+  // readonly city: string;
+}
+
 export class DefaultColumnResponse extends CreateUserDto {
   @ApiProperty()
   readonly id: number;
