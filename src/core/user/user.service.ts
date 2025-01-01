@@ -60,10 +60,6 @@ export class UserService {
           id: In(rolesIdList),
         },
       });
-      console.log(
-        '🍉 ~ file: user.service.ts:63 ~ UserService ~ roles:',
-        roles,
-      );
       const newUser = this.userRepository.create({
         username,
         password: enHashPassword,
@@ -101,10 +97,6 @@ export class UserService {
         wechatAvatar: avatarUrl,
         roles: roles, // 赋予默认角色，比如普通用户角色，可根据实际调整
       });
-      console.log(
-        '🍉 ~ file: user.service.ts:99 ~ UserService ~ createUserByWeChat ~ newUser:',
-        newUser,
-      );
       await this.userRepository.save(newUser);
       return newUser;
     } catch (error) {
@@ -113,7 +105,7 @@ export class UserService {
   }
 
   async findAll() {
-    return this.userRepository.find();
+    return this.userRepository.findAndCount();
   }
 
   async findByUsername(username: string): Promise<User | undefined> {
