@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "tm": "cross-env NODE_ENV=dev ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d dist/common/config/ormconfig.js",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d dist/common/config/ormconfig.js",
+    "typeorm": "cross-env NODE_ENV=dev ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d src/common/config/ormconfig.ts",
     "migration:create": "cross-env ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:create ./src/migrations/blank",
     "migration:init": "cross-env npm run typeorm -- migration:generate ./src/migrations/initDb",
     "migration:generate": "cross-env npm run typeorm -- migration:generate ./src/migrations/update",
@@ -78,6 +78,7 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",

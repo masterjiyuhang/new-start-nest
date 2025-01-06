@@ -1,5 +1,8 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+import * as dotenv from 'dotenv';
+import { resolve } from 'node:path';
 
+dotenv.config({ path: resolve(__dirname, '../../../.env.dev') });
 /**
  * pnpm tm 运行typeorm 的migration
  * pnpm tm schema:sync 同步实体和数据库模式
@@ -9,6 +12,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
  * pnpm run migration:generate 生成迁移文件
  *
  */
+
 export const ormconfig: DataSourceOptions = {
   type: 'mysql',
   host: process.env.DATABASE_HOST ?? '192.168.3.75',

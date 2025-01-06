@@ -41,6 +41,21 @@ services:
       - TZ=Asia/Shanghai # 解决容器 时区的问题
     networks:
       - cch-server
+  server: # 服务
+    container_name: cch_server_demo
+    build: # 根据Dockerfile构建镜像
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env.prod
+    ports:
+      - 3234:3234
+    restart: on-failure # 设置自动重启，这一步必须设置，主要是存在mysql还没有启动完成就启动了node服务
+    networks:
+      - cch-server
+    depends_on: # node服务依赖于mysql和redis
+      - mysql_demo
+      - redis_demo
 
 # 定义卷
 volumes:
