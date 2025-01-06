@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="CCH Server" width="240" height="240" src="./config/logo.svg">
+  <img alt="CCH Server" width="240" height="240" src="./config/public/logo.svg">
   <h1>CCH Server</h1>
 </div>
 
