@@ -1,8 +1,14 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { resolve } from 'node:path';
+import { envConfig } from '.';
 
-dotenv.config({ path: resolve(__dirname, '../../../.env.dev') });
+async function bootstrap() {
+  const env = envConfig[process.env.NODE_ENV] || '.env';
+  dotenv.config({ path: resolve(__dirname, `../../../${env}`) });
+}
+
+bootstrap();
 /**
  * pnpm tm 运行typeorm 的migration
  * pnpm tm schema:sync 同步实体和数据库模式

@@ -10,6 +10,11 @@ type ZZBZaseConfig = {
   port: number;
   db: TypeOrmModuleOptions;
 };
+export const envConfig = {
+  dev: '.env.dev',
+  prod: '.env.prod',
+  local: '.env.local',
+};
 
 export const baseConfig = registerAs(
   'baseConfig',

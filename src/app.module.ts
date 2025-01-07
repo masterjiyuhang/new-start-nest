@@ -19,18 +19,12 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 import { CoreModule } from './core/core.module';
 import { CarModule } from './modules/cars/car.module';
-import { defaultConfig, baseConfig } from './common/config';
+import { defaultConfig, baseConfig, envConfig } from './common/config';
 import { UploadModule } from './modules/upload/upload.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
 import { MemberModule } from './modules/member/member.module';
 import { DogsModule } from './modules/dogs/dogs.module';
-
-const envConfig = {
-  dev: '.env.dev',
-  prod: '.env.prod',
-  local: '.env.local',
-};
 
 @Module({
   imports: [
