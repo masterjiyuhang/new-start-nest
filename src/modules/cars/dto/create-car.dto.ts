@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsDateString,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -23,11 +24,27 @@ export class CreateCarDto {
   @IsNotEmpty()
   readonly color: string;
 
-  @IsString()
+  @IsInt()
   @IsNotEmpty()
-  readonly transmission: string;
+  readonly transmission: number; // 使用数字枚举值代替字符串
 
   @IsBoolean()
   @IsOptional()
   readonly is_over_load: boolean = false;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly vin: string; // 车辆车架号
+
+  @IsDateString()
+  @IsNotEmpty()
+  readonly registration_date: string; // 首次登记日期
+
+  @IsString()
+  @IsNotEmpty()
+  readonly fuel_type: string; // 燃油类型
+
+  @IsOptional()
+  @IsInt({ each: true })
+  readonly car_type_ids?: number[]; // 多对多关系中的类型 ID 列表
 }

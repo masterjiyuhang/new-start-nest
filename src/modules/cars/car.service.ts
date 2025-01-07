@@ -24,21 +24,42 @@ export class CarService {
   ) {}
 
   async create(payload: CreateCarDto) {
-    const { title, city, years, color, transmission, is_over_load } = payload;
-    const existCar = await this.carRepository.findOne({
-      where: { title: title },
-    });
-
-    if (existCar) throw new ApiException('车辆已存在', ApiErrorCode.CAR_EXIST);
-    const newCar = this.carRepository.create({
+    const {
       title,
       city,
       years,
       color,
       transmission,
       is_over_load,
+      vin,
+      fuel_type,
+      registration_date,
+    } = payload;
+    const existCar = await this.carRepository.findOne({
+      where: { vin: vin },
     });
-    return this.carRepository.save(newCar);
+
+    this.logger.log(`开始创建车辆，VIN码为: ${vin}`);
+
+    // if (existCar) throw new ApiException('车辆已存在', ApiErrorCode.CAR_EXIST);
+    if (existCar) {
+      this.logger.warn(`车辆已存在，VIN码为: ${vin}`);
+      throw new ApiException('车辆已存在', ApiErrorCode.CAR_EXIST);
+    }
+    const savedCar = this.carRepository.create({
+      title,
+      city,
+      years,
+      color,
+      transmission,
+      is_over_load,
+      vin,
+      fuel_type,
+      registration_date,
+    });
+
+    this.logger.log(`车辆创建成功，ID为: ${savedCar.id}`);
+    return this.carRepository.save(savedCar);
   }
 
   async remove(name: string): Promise<void> {
