@@ -1,6 +1,7 @@
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
-  IsDateString,
+  IsDate,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -36,8 +37,9 @@ export class CreateCarDto {
   @IsNotEmpty()
   readonly vin: string; // 车辆车架号
 
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
   readonly registration_date: string; // 首次登记日期
 
   @IsString()
