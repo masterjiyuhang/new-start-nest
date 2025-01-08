@@ -34,7 +34,7 @@ export class Car extends BaseTime {
   @Column({ length: 30, comment: '上牌城市' })
   city: string;
 
-  @Column({ length: 30, comment: '年份' })
+  @Column({ comment: '年份' })
   years: number;
 
   @Column({ length: 30, comment: '车辆颜色' })
