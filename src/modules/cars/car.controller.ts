@@ -126,8 +126,8 @@ export class CarController {
   }
 
   @Post('del')
-  async remove(@Body('name') name: string) {
-    return await this.carService.remove(name);
+  async remove(@Body('vin') vinCode: string) {
+    return await this.carService.remove(vinCode);
   }
 
   @Post('setType')

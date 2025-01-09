@@ -62,9 +62,9 @@ export class CarService {
     return this.carRepository.save(savedCar);
   }
 
-  async remove(name: string): Promise<void> {
+  async remove(vinCode: string): Promise<void> {
     const existCar = await this.carRepository.findOne({
-      where: { title: name },
+      where: { vin: vinCode },
     });
 
     if (!existCar) throw new HttpException('车辆不存在', HttpStatus.NOT_FOUND);
