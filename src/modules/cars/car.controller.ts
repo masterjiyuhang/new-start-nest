@@ -39,17 +39,24 @@ export class CarController {
 
   @Get('list')
   @UseInterceptors(NoCacheInterceptor)
-  // @Roles(roleEnums.ADMIN, roleEnums.SUPER_ADMIN)
   async findAll(
-    @Query('isOverload', new DefaultValuePipe(true), ParseBoolPipe)
+    @Query('isOverload', new DefaultValuePipe(false), ParseBoolPipe)
     isOverLoadOnly?: boolean,
+    @Query('name') name?: string,
     @Query('page', new DefaultValuePipe(0), ParseIntPipe) page?: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
   ) {
     console.log(isOverLoadOnly, page, 'list params');
-    const [list, total] = await this.carService.findAll();
+    const [list, total] = await this.carService.findListByName(
+      page,
+      limit,
+      name,
+      isOverLoadOnly,
+    );
     return {
       list,
       total,
+      page,
     };
   }
 

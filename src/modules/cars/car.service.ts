@@ -115,12 +115,19 @@ export class CarService {
     page: number,
     limit: number,
     name?: string,
+    is_over_load?: boolean,
   ): Promise<[Car[], number]> {
     const queryBuilder = this.carRepository.createQueryBuilder('car');
 
     if (name) {
       queryBuilder.andWhere('car.title LIKE :title', {
         title: `%${name}%`,
+      });
+    }
+
+    if (is_over_load !== undefined) {
+      queryBuilder.andWhere('car.is_over_load = :is_over_load', {
+        is_over_load: is_over_load,
       });
     }
 
