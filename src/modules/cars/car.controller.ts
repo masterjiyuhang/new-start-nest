@@ -25,7 +25,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { roleEnums } from 'src/common/enums/role.enums';
 import { Public } from '../../common/decorators/public.decorator';
-import { CarByNamePipe } from '../../common/pipes/CarByName.pipe';
+import { CarByIdPipe, CarByNamePipe } from '../../common/pipes/Car.pipe';
 import { Request } from 'express';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { NoCacheInterceptor } from 'src/common/interceptors/cache.interceptor';
@@ -44,12 +44,12 @@ export class CarController {
     isOverLoadOnly?: boolean,
     @Query('name') name?: string,
     @Query('page', new DefaultValuePipe(0), ParseIntPipe) page?: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Query('size', new DefaultValuePipe(10), ParseIntPipe) size?: number,
   ) {
     console.log(isOverLoadOnly, page, 'list params');
     const [list, total] = await this.carService.findListByName(
       page,
-      limit,
+      size,
       name,
       isOverLoadOnly,
     );
@@ -88,6 +88,11 @@ export class CarController {
 
   @Get('getByName')
   async getByName(@Body('name', CarByNamePipe) car: Car) {
+    return car;
+  }
+
+  @Get('/detail/:id')
+  async getDetailById(@Param('id', CarByIdPipe) car: Car) {
     return car;
   }
 

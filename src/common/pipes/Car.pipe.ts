@@ -29,3 +29,23 @@ export class CarByNamePipe implements PipeTransform<string> {
     }
   }
 }
+
+@Injectable()
+export class CarByIdPipe implements PipeTransform<number> {
+  constructor(private readonly carService: CarService) {}
+
+  async transform(value: number, metadata: ArgumentMetadata) {
+    console.log(
+      '🍉 ~ file: Car.pipe.ts:38 ~ CarByIdPipe ~ transform ~ metadata:',
+      value,
+      metadata,
+    );
+    if (isEmpty(value)) {
+      throw new BadRequestException('Validation failed');
+    }
+    const car = await this.carService.findOneById(value);
+    if (car) {
+      return car;
+    }
+  }
+}

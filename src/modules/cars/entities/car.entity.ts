@@ -24,7 +24,7 @@ enum FuelType {
 }
 @Entity('car')
 export class Car extends BaseTime {
-  @Exclude()
+  // @Exclude()
   @PrimaryGeneratedColumn('uuid')
   id: number;
 

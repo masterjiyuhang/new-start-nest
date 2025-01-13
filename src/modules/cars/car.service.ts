@@ -111,6 +111,32 @@ export class CarService {
     });
   }
 
+  async findOneById(id: number) {
+    return await this.carRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['car_type'],
+      // 在 TypeORM 中，当你使用 relations 选项时，select 中必须包含主实体的主键字段。
+      // 因为 TypeORM 在构建 SQL 查询时，需要确保能够通过主键字段正确定位主实体的记录。
+      select: [
+        'id',
+        'title',
+        'city',
+        'years',
+        'color',
+        'transmission',
+        'is_over_load',
+        'platform',
+        'platform_id',
+        'vin',
+        'registration_date',
+        'fuel_type',
+        'car_type',
+      ],
+    });
+  }
+
   async findListByName(
     page: number,
     limit: number,
