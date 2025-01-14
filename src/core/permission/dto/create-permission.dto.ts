@@ -10,6 +10,12 @@ export class CreatePermissionDto extends BaseDTO {
   name: string;
 
   @Expose()
+  @IsNotEmpty({
+    message: '权限编码不能为空',
+  })
+  code: string;
+
+  @Expose()
   @Length(5, 20, {
     message: '描述信息应在5-20字之间',
   })

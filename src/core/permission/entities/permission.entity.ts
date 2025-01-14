@@ -7,9 +7,14 @@ export class Permission extends BaseDTO {
   id: string;
 
   @Column({
-    length: 50,
+    length: 150,
   })
   name: string;
+
+  @Column({
+    length: 150,
+  })
+  code: string;
 
   @Column({
     length: 100,

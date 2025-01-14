@@ -86,7 +86,7 @@ export class UserService {
     }
     const roles = await this.roleRepository.find({
       where: {
-        id: In([roleEnums.USER]),
+        code: In([roleEnums.USER]),
       },
     });
     try {

@@ -22,7 +22,7 @@ export class CreateRoleDto {
   })
   desc: string;
 
-  permissionIds: number[] = [];
+  permissionCodes: string[] = [];
 
   menuIds: number[];
 }

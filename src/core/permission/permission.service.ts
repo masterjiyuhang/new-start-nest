@@ -15,13 +15,13 @@ export class PermissionService {
     private permissionRepository: Repository<Permission>,
   ) {}
   async create(createPermissionDto: CreatePermissionDto, request: any) {
-    const name = createPermissionDto.name;
+    const code = createPermissionDto.code;
     const existingPermission = await this.permissionRepository.findOne({
-      where: { name: name },
+      where: { code: code },
     });
     if (existingPermission) {
       throw new ApiException(
-        `此权限字段 ${name} 已存在`,
+        `此权限字段 ${createPermissionDto.name} 已存在`,
         ApiErrorCode.PERMISSION_EXIST,
       );
     }

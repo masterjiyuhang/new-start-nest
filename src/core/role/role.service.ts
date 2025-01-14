@@ -19,7 +19,7 @@ export class RoleService {
   ) {}
 
   async create(createRoleDto: CreateRoleDto) {
-    const { name, desc, code, permissionIds } = createRoleDto;
+    const { name, desc, code, permissionCodes } = createRoleDto;
     const existRole = await this.roleRepository.findOne({
       where: { name },
     });
@@ -30,7 +30,7 @@ export class RoleService {
     // 查询传入数组permissionIds的全部permission实体
     const permissions = await this.permissionRepository.find({
       where: {
-        id: In(permissionIds),
+        code: In(permissionCodes),
       },
     });
 
