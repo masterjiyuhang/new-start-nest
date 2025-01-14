@@ -92,6 +92,11 @@ export class CarController {
   }
 
   @Get('/detail/:id')
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: '根据id查询汽车详情',
+  })
   async getDetailById(@Param('id', CarByIdPipe) car: Car) {
     return car;
   }
