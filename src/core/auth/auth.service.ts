@@ -22,7 +22,10 @@ export class AuthService {
     private readonly httpService: HttpService,
   ) {}
 
-  async login(username: string, password: string): Promise<Token> {
+  async login(
+    username: string,
+    password: string,
+  ): Promise<Token & { userId: number }> {
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
@@ -44,9 +47,14 @@ export class AuthService {
       );
     }
 
-    return this.generateTokens({
+    const tokens = this.generateTokens({
       userId: user.id,
     });
+
+    return {
+      ...tokens,
+      userId: user.id,
+    };
   }
 
   validateUser(userId: number): Promise<User> {
