@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSourceOptions } from 'typeorm';
 
 export const jwtConstants = {
   secret:
@@ -8,7 +9,7 @@ export const jwtConstants = {
 
 type ZZBZaseConfig = {
   port: number;
-  db: TypeOrmModuleOptions;
+  db: DataSourceOptions & TypeOrmModuleOptions;
 };
 export const envConfig = {
   dev: '.env.dev',
@@ -22,16 +23,19 @@ export const baseConfig = registerAs(
     port: +process.env.PORT || 3000,
     db: {
       type: 'mysql',
-      synchronize: false, //是否自动同步实体文件,生产环境建议关闭
-      connectTimeout: 30000,
-      database: process.env.DATABASE_NAME,
       host: process.env.DATABASE_HOST,
       port: +process.env.DATABASE_PORT,
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
+      synchronize: false, //是否自动同步实体文件,生产环境建议关闭
+
+      connectTimeout: 30000,
       logging: false,
+
       entities: ['dist/**/*.entity.js'],
       migrations: ['dist/**/migrations/*.js'],
+
       migrationsTableName: 'migration-history',
       migrationsRun: true,
       timezone: '+08:00',

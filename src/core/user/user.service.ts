@@ -45,7 +45,7 @@ export class UserService {
     }
     const { username, password, email, roleIds } = payload;
     // 默认给注册的用户赋值普通用户角色
-    const rolesIdList = roleIds || [roleEnums.USER];
+    const rolesIdList = roleIds || [roleEnums.Viewer];
     const enHashPassword = hashPassword(password);
     const existUser = await this.userRepository.findOne({
       where: { username },
@@ -57,7 +57,7 @@ export class UserService {
     try {
       const roles = await this.roleRepository.find({
         where: {
-          id: In(rolesIdList),
+          code: In(rolesIdList),
         },
       });
       const newUser = this.userRepository.create({

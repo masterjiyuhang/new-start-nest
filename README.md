@@ -90,7 +90,8 @@ pnpm migration:init
 **只有第一次初始化数据库后需要执行**
 
 ```bash
-pnpm migration:run
+pnpm tm:run
+pnpm seed
 ```
 
 ### 6. 启动后端服务

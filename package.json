@@ -6,13 +6,15 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "tm": "cross-env NODE_ENV=dev ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d dist/common/config/ormconfig.js",
+    "tm": "cross-env NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d dist/common/config/ormconfig.js",
     "typeorm": "cross-env NODE_ENV=dev ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d src/common/config/ormconfig.ts",
     "migration:create": "cross-env ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli migration:create ./src/migrations/blank",
     "migration:init": "cross-env npm run typeorm -- migration:generate ./src/migrations/initDb",
     "migration:generate": "cross-env npm run typeorm -- migration:generate ./src/migrations/update",
     "migration:run": "npm run build && npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
+    "tm:run": "npm run build && npm run tm -- migration:run",
+    "seed": "cross-env NODE_ENV=local npx typeorm-extension seed:run -d src/common/config/ormconfig.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -60,7 +62,8 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.14",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.3.2",
