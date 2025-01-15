@@ -8,6 +8,8 @@ import {
   // HttpStatus,
   Injectable,
 } from '@nestjs/common';
+import { ROLE_DECORATOR_KEY } from '../decorators/roles.decorator';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 // import { Roles } from '../decorators/roles.decorator';
 
 @Injectable()
@@ -15,15 +17,23 @@ export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    // const roles: any = this.reflector.get(Roles, context.getHandler());
     const guardRoles = this.reflector.getAllAndOverride<string[] | undefined>(
-      'roles',
+      ROLE_DECORATOR_KEY,
       [
         context.getHandler(), // Method Roles
         context.getClass(), // Controller Roles
       ],
     );
-
+    const isPublic = this.reflector.getAllAndOverride<boolean | undefined>(
+      IS_PUBLIC_KEY,
+      [
+        context.getHandler(), // Method Roles
+        context.getClass(), // Controller Roles
+      ],
+    );
+    if (isPublic) {
+      return true;
+    }
     if (!guardRoles) {
       return true;
     }

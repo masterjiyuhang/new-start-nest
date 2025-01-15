@@ -43,9 +43,9 @@ export class UserService {
     if ('openid' in payload) {
       return this.createUserByWeChat(payload);
     }
-    const { username, password, email, roleIds } = payload;
+    const { username, password, email } = payload;
     // 默认给注册的用户赋值普通用户角色
-    const rolesIdList = roleIds || [roleEnums.Viewer];
+    const rolesIdList = [roleEnums.Viewer];
     const enHashPassword = hashPassword(password);
     const existUser = await this.userRepository.findOne({
       where: { username },
@@ -170,12 +170,12 @@ export class UserService {
       throw new ApiException('用户不存在', ApiErrorCode.USER_NOT_EXIST);
 
     const returnRoles: string[] = user.roles.map((item) => {
-      return item.id;
+      return item.code;
     });
 
     const permissions = user.roles.flatMap((role) => role.permissions);
     const returnPermissions = permissions.map((item) => {
-      return item.id;
+      return item.code;
     });
 
     return {
