@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "tm": "cross-env NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d dist/common/config/ormconfig.js",
     "typeorm": "cross-env NODE_ENV=dev ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d src/common/config/ormconfig.ts",
