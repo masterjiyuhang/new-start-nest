@@ -51,10 +51,10 @@ export class RoleController {
     };
   }
 
-  @Get(':id')
+  @Get(':code')
   @Roles(roleEnums.SUPER_ADMIN)
-  findOne(@Param('id') id: string) {
-    return this.roleService.findOne(id);
+  findOne(@Param('code') code: string) {
+    return this.roleService.findOne(code);
   }
 
   @Patch('update/:id')

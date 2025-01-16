@@ -8,6 +8,7 @@ import { Role } from './entities/role.entity';
 import { Permission } from '../permission/entities/permission.entity';
 import { ApiException } from 'src/common/filters/exception-list';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
+import { roleEnums } from 'src/common/enums/role.enums';
 
 @Injectable()
 export class RoleService {
@@ -56,17 +57,20 @@ export class RoleService {
     queryBuilder.skip(page * limit).take(limit);
 
     const [result, total] = await queryBuilder.getManyAndCount();
-    return [result, total];
+    const res = result.filter(
+      (item) => item.code !== roleEnums.SUPER_ADMIN + '',
+    );
+    return [res, total === res.length ? total : res.length];
   }
 
-  async findOne(id: string): Promise<Role> {
+  async findOne(code: string): Promise<Role> {
     const role = await this.roleRepository.findOne({
       where: {
-        id,
+        code,
       },
     });
     if (!role) {
-      throw new NotFoundException(`Role with ID ${id} not found`);
+      throw new NotFoundException(`Role with code ${code} not found`);
     }
     return role;
   }
