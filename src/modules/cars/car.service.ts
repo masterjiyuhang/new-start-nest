@@ -6,7 +6,7 @@ import type { AxiosError } from 'axios';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Car } from './entities/car.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ApiException } from 'src/common/filters/exception-list';
 import { ApiErrorCode } from 'src/common/enums/api-error-code.enum';
 import { CarType } from '../car-type/entities/car-type.entity';
@@ -74,6 +74,55 @@ export class CarService {
     await this.carRepository.save(existCar);
   }
 
+  async update(updateCarDto: UpdateCarDto) {
+    const {
+      id,
+      is_over_load,
+      title,
+      city,
+      years,
+      transmission,
+      color,
+      vin,
+      registration_date,
+      fuel_type,
+      car_type,
+    } = updateCarDto;
+    console.log(
+      '🍉 ~ file: car.service.ts:79 ~ CarService ~ update ~ updateCarDto:',
+      updateCarDto,
+    );
+    const existCar = await this.carRepository.findOne({
+      where: { id: id },
+    });
+    if (!existCar) throw new HttpException('车辆不存在', HttpStatus.NOT_FOUND);
+
+    if (car_type.length > 0) {
+      const type = await this.carTypeRepository.find({
+        where: {
+          car_type_code: In(car_type),
+        },
+      });
+      existCar.car_type = type;
+    }
+    console.log(
+      '🍉 ~ file: car.service.ts:87 ~ CarService ~ update ~ existCar:',
+      existCar,
+    );
+
+    existCar.is_over_load = is_over_load;
+    existCar.title = title;
+    existCar.city = city;
+    existCar.years = years;
+    existCar.transmission = transmission;
+    existCar.color = color;
+    existCar.vin = vin;
+    existCar.registration_date = registration_date;
+    existCar.fuel_type = fuel_type;
+
+    await this.carRepository.update(existCar.id, existCar);
+  }
+
   // 设置车辆类型
   async setCarType(updateCarDto: UpdateCarDto) {
     const { car_type, title } = updateCarDto;
@@ -83,7 +132,7 @@ export class CarService {
     if (!existCar) throw new HttpException('车辆不存在', HttpStatus.NOT_FOUND);
     const type = await this.carTypeRepository.find({
       where: {
-        id: car_type,
+        car_type_code: In(car_type),
       },
     });
     if (!type) throw new HttpException('车辆类型不存在', HttpStatus.NOT_FOUND);
@@ -111,7 +160,7 @@ export class CarService {
     });
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: string) {
     return await this.carRepository.findOne({
       where: {
         id: id,

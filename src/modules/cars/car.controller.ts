@@ -94,7 +94,7 @@ export class CarController {
   @Get('/detail/:id')
   @ApiParam({
     name: 'id',
-    type: Number,
+    type: String,
     description: '根据id查询汽车详情',
   })
   async getDetailById(@Param('id', CarByIdPipe) car: Car) {
@@ -140,6 +140,12 @@ export class CarController {
   ) {
     console.log(payload, '创建的参数');
     return await this.carService.create(payload);
+  }
+
+  @Post('update')
+  @Header('Content-Type', 'application/json')
+  async update(@Body(new CustomerValidationPipe()) payload: UpdateCarDto) {
+    return await this.carService.update(payload);
   }
 
   @Post('del')

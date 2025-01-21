@@ -14,7 +14,10 @@ export class CarByNamePipe implements PipeTransform<string> {
   constructor(private readonly carService: CarService) {}
 
   async transform(value: string, metadata: ArgumentMetadata) {
-    console.log(metadata, value);
+    console.log(
+      '🍉 ~ file: Car.pipe.ts:17 ~ CarByNamePipe ~ transform ~ metadata:',
+      metadata,
+    );
     if (isEmpty(value)) {
       throw new BadRequestException('Validation failed');
     }
@@ -31,10 +34,10 @@ export class CarByNamePipe implements PipeTransform<string> {
 }
 
 @Injectable()
-export class CarByIdPipe implements PipeTransform<number> {
+export class CarByIdPipe implements PipeTransform<string> {
   constructor(private readonly carService: CarService) {}
 
-  async transform(value: number, metadata: ArgumentMetadata) {
+  async transform(value: string, metadata: ArgumentMetadata) {
     console.log(
       '🍉 ~ file: Car.pipe.ts:38 ~ CarByIdPipe ~ transform ~ metadata:',
       value,

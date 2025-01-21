@@ -16,17 +16,17 @@ enum TransmissionType {
   MANUAL = 2,
 }
 enum FuelType {
-  UNKNOWN = 0,
-  PETROL = 1,
-  DIESEL = 2,
-  ELECTRIC = 3,
-  HYBRID = 4,
+  UNKNOWN = '0',
+  PETROL = '1',
+  DIESEL = '2',
+  ELECTRIC = '3',
+  HYBRID = '4',
 }
 @Entity('car')
 export class Car extends BaseTime {
   // @Exclude()
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ length: 30, comment: '车辆名称' })
   title: string;
@@ -78,9 +78,9 @@ export class Car extends BaseTime {
   @Exclude()
   delete_flag: number;
 
-  @ManyToMany(() => CarType)
+  @ManyToMany(() => CarType, { nullable: true })
   @JoinTable({
     name: 'car_type_relation',
   })
-  car_type: CarType[];
+  car_type?: CarType[];
 }
