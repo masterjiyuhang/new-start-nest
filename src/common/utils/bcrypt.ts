@@ -1,7 +1,7 @@
-import { hashSync, compare, genSaltSync } from 'bcrypt';
+import { hashSync, compare } from '@node-rs/bcrypt';
 
 const saltRounds = 10;
-const salt = genSaltSync(saltRounds);
+// const salt = genSaltSync(saltRounds, '2a');
 
 /**
  * 加密
@@ -9,7 +9,7 @@ const salt = genSaltSync(saltRounds);
  * @returns
  */
 export const hashPassword = (myPlaintextPassword: string) =>
-  hashSync(myPlaintextPassword, salt);
+  hashSync(myPlaintextPassword, saltRounds);
 
 /**
  * 比较密码

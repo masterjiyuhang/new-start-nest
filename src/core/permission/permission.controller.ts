@@ -18,6 +18,7 @@ import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatorIdInterceptor } from 'src/common/interceptors/creator-id.interceptor';
 import { OperatorIdInterceptor } from 'src/common/interceptors/operator_id.interceptor';
+import { Request } from 'express';
 
 @ApiTags('Permission')
 @Controller('permission')
