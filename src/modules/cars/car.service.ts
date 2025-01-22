@@ -123,7 +123,10 @@ export class CarService {
     await this.carRepository.update(existCar.id, existCar);
   }
 
-  // 设置车辆类型
+  /**
+   * 设置车辆类型
+   * @param updateCarDto
+   */
   async setCarType(updateCarDto: UpdateCarDto) {
     const { car_type, title } = updateCarDto;
     const existCar = await this.carRepository.findOne({
@@ -140,6 +143,10 @@ export class CarService {
     await this.carRepository.save(existCar);
   }
 
+  /**
+   * 获取所有车辆信息
+   * @returns
+   */
   findAll() {
     const job = this.schedulerRegistry.getCronJob('sixCron');
     job.stop();
@@ -148,6 +155,11 @@ export class CarService {
     return this.carRepository.findAndCount();
   }
 
+  /**
+   * 查询车辆信息
+   * @param name 车辆名称
+   * @returns
+   */
   async findOne(name: string) {
     return await this.carRepository.findOne({
       where: {
@@ -160,6 +172,13 @@ export class CarService {
     });
   }
 
+  // shichang
+
+  /**
+   * 查询单个汽车
+   * @param id 汽车ID
+   * @returns
+   */
   async findOneById(id: string) {
     return await this.carRepository.findOne({
       where: {
