@@ -5,6 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from '../user/entities/user.entity';
 import { JwtDto } from './dto/jwt.dto';
 import { AuthService } from './auth.service';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(
@@ -16,13 +17,18 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     readonly configService: ConfigService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
       secretOrKey: configService.get('jwtRefreshSecret'),
-      passReqToCallBack: true,
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: JwtDto): Promise<User> {
+  async validate(req: Request, payload: JwtDto): Promise<User> {
+    console.log(
+      '🍉 ~ file: jwt-refresh.strategy.ts:26 ~ validate ~ payload:',
+      payload.userId,
+      payload,
+    );
     const user = await this.authService.validateUser(payload.userId);
     if (!user) {
       throw new UnauthorizedException();

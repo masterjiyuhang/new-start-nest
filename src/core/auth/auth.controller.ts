@@ -51,7 +51,7 @@ export class AuthController {
   @Public()
   @ApiBearerAuth('refresh-token')
   @UseGuards(JwtRefreshGuard)
-  @Get('refresh')
+  @Post('refresh')
   public refresh(@Req() req: AuthorizedRequest) {
     console.log(
       '🚀 ~ file: auth.controller.ts:51 ~ AuthController ~ refresh ~ req:',

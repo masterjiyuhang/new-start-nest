@@ -131,10 +131,6 @@ export class AuthService {
     const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${process.env.WECHAT_APP_ID}&secret=${process.env.WECHAT_APP_SECRET}&js_code=${code}&grant_type=authorization_code`;
     try {
       const res = await lastValueFrom(this.httpService.get(url));
-      // console.log(
-      //   '🍉 ~ file: auth.service.ts:126 ~ AuthService ~ authWeCheat ~ res:',
-      //   res,
-      // );
       const { openid, session_key } = res.data;
 
       let user = await this.usersService.findByOpenid(openid);
@@ -156,10 +152,6 @@ export class AuthService {
         session_key,
       };
     } catch (error) {
-      console.log(
-        '🍉 ~ file: auth.service.ts:126 ~ AuthService ~ authWeCheat ~ error:',
-        error,
-      );
       throw new Error('微信登录失败，请稍后再试');
     }
     // this.httpService.get(url).subscribe(async (res) => {
