@@ -43,8 +43,16 @@ async function bootstrap() {
     fallbackOnErrors: true,
   });
 
+  // 修改 CORS 配置
   app.enableCors({
-    origin: ['127.0.0.1', process.env.ENABLE_DOMAIN],
+    origin: [
+      '127.0.0.1',
+      process.env.ENABLE_DOMAIN,
+      'https://masterjiyuhang.github.io',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 允许的请求方法
+    allowedHeaders: 'Accept,Content-Type,X-Requested-With', // 允许的请求头
+    credentials: true, // 允许携带凭证（如 cookies）
   });
 
   // 设置全局前缀
