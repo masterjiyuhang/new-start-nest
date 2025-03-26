@@ -11,6 +11,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtRefreshTokenStrategy } from './jwt-refresh.strategy';
 import { HttpModule } from '@nestjs/axios';
+import { RsaModule } from '../rsa/rsa.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { HttpModule } from '@nestjs/axios';
       maxRedirects: 3,
     }),
     UserModule,
+    RsaModule,
     PassportModule,
     JwtModule.registerAsync({
       global: true,

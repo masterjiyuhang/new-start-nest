@@ -18,6 +18,7 @@ import { User } from '../user/entities/user.entity';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import JwtRefreshGuard from 'src/common/guards/jwt-refresh.guard';
 import { Request } from 'express';
+import { RsaService } from '../rsa/rsa.service';
 
 type AuthorizedRequest = Request & {
   headers: { authorization: string };
@@ -27,7 +28,16 @@ type AuthorizedRequest = Request & {
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private readonly rsaService: RsaService,
+  ) {}
+
+  @Public()
+  @Get('publicKey')
+  getPublicKey() {
+    return this.rsaService.getPublicKey();
+  }
 
   @Public()
   @HttpCode(HttpStatus.OK)

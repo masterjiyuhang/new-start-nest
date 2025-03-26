@@ -13,6 +13,7 @@ import { User } from '../user/entities/user.entity';
 // import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { RsaService } from '../rsa/rsa.service';
 @Injectable()
 export class AuthService {
   constructor(
@@ -20,12 +21,18 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly rsaService: RsaService,
   ) {}
 
   async login(
     username: string,
     password: string,
   ): Promise<Token & { userId: number }> {
+    const decryptedData = this.rsaService.decryptData(password);
+    console.log(
+      '🍉 ~ auth.service.ts:32 ~ AuthService ~ decryptedData:',
+      decryptedData,
+    );
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
@@ -36,7 +43,7 @@ export class AuthService {
     }
 
     const passwordValid = await this.usersService.validatePassword(
-      password,
+      decryptedData,
       user.password,
     );
 
