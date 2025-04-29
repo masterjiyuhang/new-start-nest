@@ -49,9 +49,11 @@ async function bootstrap() {
       '127.0.0.1',
       process.env.ENABLE_DOMAIN,
       'https://masterjiyuhang.github.io',
+      'https://new-start-vue.vercel.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 允许的请求方法
-    allowedHeaders: 'Accept,Content-Type,X-Requested-With', // 允许的请求头
+    allowedHeaders:
+      'Accept,Content-Type,X-Requested-With,Authorization,X-Custom-Header', // 允许的请求头
     credentials: true, // 允许携带凭证（如 cookies）
   });
 
