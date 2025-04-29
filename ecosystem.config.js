@@ -3,14 +3,6 @@ module.exports = {
     {
       name: 'nest-server-app',
       script: 'dist/main.js',
-      // env: {
-      //   NODE_ENV: 'development',
-      //   PORT: 3000,
-      //   DATABASE_HOST: 'localhost',
-      //   DATABASE_PORT: 5432,
-      //   DATABASE_USER: 'username',
-      //   DATABASE_PASSWORD: 'password',
-      // },
       env_prod: {
         NODE_ENV: 'prod',
         PORT: 3234,
