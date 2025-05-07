@@ -1,36 +1,59 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CarController } from './car.controller';
 import { CarService } from './car.service';
-import { Car } from './interfaces/car.interface';
+import { Car } from './entities/car.entity';
 
 describe('CarController', () => {
   let carController: CarController;
-  let carService: CarService;
+  let carService: jest.Mocked<CarService>;
 
   beforeEach(async () => {
-    const moduleRef: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [CarController],
-      providers: [CarService],
+      providers: [
+        {
+          provide: CarService,
+          useValue: {
+            findListByName: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
-    carService = moduleRef.get<CarService>(CarService);
-    carController = moduleRef.get<CarController>(CarController);
+    carController = module.get<CarController>(CarController);
+    carService = module.get(CarService) as jest.Mocked<CarService>;
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should be defined', () => {
+    expect(carController).toBeDefined();
+  });
+
+  it('should initialize with carService dependency', () => {
+    expect(carController).toHaveProperty('carService', carService);
   });
 
   describe('findAll', () => {
-    it('should return an array of cars', async () => {
-      const result: Car[] = [
-        {
-          id: 1,
-          name: '小车',
-          years: 2,
-          color: 'red',
-          isOverload: false,
-        },
-      ];
+    it('should call carService.findListByName with default parameters', async () => {
+      const mockResult: [Car[], number] = [[], 0];
+      carService.findListByName.mockResolvedValue(mockResult);
 
-      jest.spyOn(carService, 'findAll').mockImplementation((): any => result);
-      expect(await carController.findAll()).toBe(result);
+      const result = await carController.findAll(
+        false, // isOverLoadOnly
+        '', // name
+        0, // page
+        10, // size
+      );
+
+      expect(carService.findListByName).toHaveBeenCalledWith(0, 10, '', false);
+      expect(result).toEqual({
+        list: [],
+        total: 0,
+        page: 0,
+      });
     });
   });
 });
