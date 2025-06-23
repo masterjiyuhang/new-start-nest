@@ -1,14 +1,16 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
+  InternalServerErrorException,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { Public } from '../../common/decorators/public.decorator';
@@ -37,6 +39,29 @@ export class AuthController {
   @Get('publicKey')
   getPublicKey() {
     return this.rsaService.getPublicKey();
+  }
+
+  @Public()
+  @Post('encryptPwd')
+  @ApiParam({
+    name: '密码',
+    type: String,
+    description: '获取公钥加密后的密码',
+  })
+  encryptPwd(@Body('pwd') pwd?: string) {
+    // 1. 参数校验
+    if (!pwd) {
+      throw new BadRequestException('缺少参数：pwd');
+    }
+
+    try {
+      // 2. 调用加密
+      const cipher = this.rsaService.encryptData(pwd);
+      return { cipher };
+    } catch (error) {
+      // 3. 捕获并抛出服务器错误
+      throw new InternalServerErrorException('密码加密失败，请稍后重试');
+    }
   }
 
   @Public()

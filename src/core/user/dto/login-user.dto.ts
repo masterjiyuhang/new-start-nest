@@ -4,7 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 export class LoginUserDto {
   @ApiProperty({
     description: '输入用户名',
-    default: 'erhang',
+    default: 'superAdmin',
   })
   @IsNotEmpty()
   readonly username: string;
@@ -12,7 +12,7 @@ export class LoginUserDto {
   @IsNotEmpty()
   @ApiProperty({
     description: '输入用户密码',
-    default: '123456',
+    default: 'admin@123',
   })
   readonly password: string;
 }

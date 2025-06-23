@@ -34,4 +34,18 @@ export class RsaService {
     );
     return decrypted.toString('utf8');
   }
+
+  // 3. 通过公钥加密密码
+  encryptData(plainText: string): string {
+    const buffer = Buffer.from(plainText, 'utf8');
+    const encrypted = crypto.publicEncrypt(
+      {
+        key: this.publicKey,
+        padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+        oaepHash: 'sha256',
+      },
+      buffer,
+    );
+    return encrypted.toString('base64');
+  }
 }
