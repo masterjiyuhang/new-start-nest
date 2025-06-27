@@ -64,6 +64,38 @@ export class AuthService {
     };
   }
 
+  async loginNoJwt(username: string, password: string) {
+    const user = await this.usersService.findByUsername(username);
+
+    if (!user) {
+      // throw new NotFoundException(`No user found for username: ${username}`);
+      throw new BadRequestException(
+        `Username/Email/Password is wrong or does not exist. please check it and try again`,
+      );
+    }
+
+    const passwordValid = await this.usersService.validatePassword(
+      password,
+      user.password,
+    );
+
+    if (!passwordValid) {
+      // throw new BadRequestException('Invalid password');
+      throw new BadRequestException(
+        `Username/Email/Password is wrong or does not exist. please check it and try again`,
+      );
+    }
+
+    const tokens = this.generateTokens({
+      userId: user.id,
+    });
+
+    return {
+      ...tokens,
+      userId: user.id,
+    };
+  }
+
   validateUser(userId: number): Promise<User> {
     return this.usersService.findByUserId(userId);
   }

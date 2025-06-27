@@ -72,6 +72,14 @@ export class AuthController {
     return this.authService.login(body.username, body.password);
   }
 
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('loginNoJwt')
+  @ApiBody({ type: LoginUserDto })
+  signInNoJwt(@Body() body: LoginUserDto) {
+    return this.authService.loginNoJwt(body.username, body.password);
+  }
+
   @Get('profile')
   getProfile(@Req() req: any) {
     return req.user;
