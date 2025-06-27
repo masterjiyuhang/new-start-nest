@@ -4,6 +4,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { Public } from '../../common/decorators/public.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Controller('user')
 @ApiTags('User')
@@ -15,10 +16,16 @@ export class UserController {
   })
   @Public()
   @Post('register')
-  @ApiOperation({
-    summary: '注册接口', // 接口描述信息
-  })
   create(@Body() payload: CreateUserDto) {
     return this.userService.createUser(payload);
+  }
+
+  @ApiOperation({
+    summary: '修改密码',
+  })
+  @Public()
+  @Post('changePassword')
+  changePassword(@Body() payload: ChangePasswordDto) {
+    return this.userService.changePassword(payload);
   }
 }

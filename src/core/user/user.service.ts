@@ -16,6 +16,7 @@ import {
 import { Role } from '../role/entities/role.entity';
 import { roleEnums } from 'src/common/enums/role.enums';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 // This should be a real class/interface representing a user entity
 
@@ -199,5 +200,20 @@ export class UserService {
     } else {
       throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
     }
+  }
+
+  async changePassword(payload: ChangePasswordDto) {
+    const { username, password, newPassword } = payload;
+    const user = await this.findByUsername(username);
+    const isPasswordValid = await this.validatePassword(
+      password,
+      user.password,
+    );
+    if (!isPasswordValid) {
+      throw new ApiException('密码错误', ApiErrorCode.PASSWORD_ERROR);
+    }
+    user.password = hashPassword(newPassword);
+    await this.userRepository.save(user);
+    return '修改成功';
   }
 }
