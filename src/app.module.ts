@@ -8,6 +8,7 @@ import {
 import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { RedisModule } from '@nestjs-modules/ioredis';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -25,6 +26,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
 import { MemberModule } from './modules/member/member.module';
 import { DogsModule } from './modules/dogs/dogs.module';
+import { RankListModule } from './modules/rank-list/rank-list.module';
 
 @Module({
   imports: [
@@ -50,6 +52,15 @@ import { DogsModule } from './modules/dogs/dogs.module';
         return dbConfig;
       },
     }),
+    RedisModule.forRootAsync({
+      useFactory: () => ({
+        type: 'single',
+        url: process.env.REDIS_URL,
+        options: {
+          password: process.env.REDIS_PASSWORD,
+        },
+      }),
+    }),
     PassportModule,
     CoreModule,
     CarModule,
@@ -58,6 +69,7 @@ import { DogsModule } from './modules/dogs/dogs.module';
     TasksModule,
     MemberModule,
     DogsModule,
+    RankListModule,
   ],
   controllers: [AppController],
   providers: [
