@@ -83,6 +83,7 @@ async function bootstrap() {
   console.log(
     process.env.PORT,
     `Application is running on: ${await app.getUrl()}`,
+    `Swagger is running on: ${await app.getUrl()}/swagger`,
   );
 }
 
